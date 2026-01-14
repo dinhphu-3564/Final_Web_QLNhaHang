@@ -1,0 +1,524 @@
+/**
+ * About Page Specific Styles
+ * Customer-Facing Restaurant Website
+ */
+
+/* ============================================
+   PAGE BANNER
+   ============================================ */
+
+.page-banner-user {
+    background: linear-gradient(135deg, #4CAF50 0%, #2E7D32 100%);
+    padding: 60px 0 50px;
+    text-align: center;
+    position: relative;
+}
+
+.page-banner-user::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: url('/images/banners/hero-banner.png') center/cover;
+    opacity: 0.15;
+}
+
+.page-banner-user .container-user {
+    position: relative;
+    z-index: 1;
+}
+
+.page-banner-title {
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: white;
+    margin-bottom: 16px;
+    text-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+}
+
+.breadcrumb-user {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 8px;
+    list-style: none;
+    padding: 12px 24px;
+    margin: 0 auto;
+    background: rgba(255, 255, 255, 0.15);
+    border-radius: 30px;
+    backdrop-filter: blur(10px);
+    width: fit-content;
+}
+
+.breadcrumb-item-user {
+    font-size: 15px;
+    color: rgba(255, 255, 255, 0.9);
+    display: flex;
+    align-items: center;
+}
+
+.breadcrumb-item-user a {
+    color: rgba(255, 255, 255, 0.9);
+    text-decoration: none;
+    transition: color 0.2s ease;
+}
+
+.breadcrumb-item-user a:hover {
+    color: white;
+    text-decoration: underline;
+}
+
+.breadcrumb-item-user.active {
+    color: white;
+    font-weight: 600;
+}
+
+.breadcrumb-item-user+.breadcrumb-item-user::before {
+    content: '›';
+    margin-right: 8px;
+    color: rgba(255, 255, 255, 0.6);
+    font-size: 18px;
+    font-weight: bold;
+}
+
+/* ============================================
+   PAGE SECTION
+   ============================================ */
+
+.about-page-section {
+    background: var(--user-bg-secondary);
+    padding: var(--user-space-8) 0 var(--user-space-16);
+}
+
+/* ============================================
+   ABOUT CARD
+   ============================================ */
+
+.about-card,
+.features-card,
+.chef-card,
+.gallery-card {
+    background: white;
+    border-radius: var(--user-radius-2xl);
+    padding: var(--user-space-10);
+    box-shadow: var(--user-shadow-lg);
+    margin-bottom: var(--user-space-8);
+}
+
+.about-header {
+    text-align: center;
+    margin-bottom: var(--user-space-10);
+}
+
+.about-header h2 {
+    font-size: var(--user-font-3xl);
+    font-weight: var(--user-font-bold);
+    color: var(--user-primary);
+    margin-bottom: var(--user-space-4);
+}
+
+.header-divider {
+    width: 100px;
+    height: 4px;
+    background: var(--user-gradient-primary);
+    border-radius: var(--user-radius-full);
+    margin: 0 auto;
+}
+
+/* About Image */
+.about-image-wrapper {
+    position: relative;
+    border-radius: var(--user-radius-xl);
+    overflow: hidden;
+    box-shadow: var(--user-shadow-xl);
+    height: 100%;
+    min-height: 400px;
+}
+
+.about-main-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+
+.about-image-badge {
+    position: absolute;
+    bottom: var(--user-space-6);
+    left: var(--user-space-6);
+    background: var(--user-gradient-primary);
+    color: white;
+    padding: var(--user-space-3) var(--user-space-5);
+    border-radius: var(--user-radius-full);
+    display: flex;
+    align-items: center;
+    gap: var(--user-space-2);
+    font-weight: var(--user-font-bold);
+    box-shadow: var(--user-shadow-lg);
+}
+
+.about-image-badge i {
+    font-size: 24px;
+}
+
+/* About Content */
+.about-content-text {
+    font-size: var(--user-font-lg);
+    line-height: var(--user-leading-relaxed);
+    color: var(--user-text-secondary);
+}
+
+.lead-text {
+    font-size: var(--user-font-xl);
+    font-weight: var(--user-font-medium);
+    color: var(--user-text-primary);
+    margin-bottom: var(--user-space-6);
+}
+
+.highlight-box-about {
+    background: var(--user-primary-alpha-10);
+    border-left: 4px solid var(--user-primary);
+    padding: var(--user-space-6);
+    margin: var(--user-space-6) 0;
+    border-radius: 0 var(--user-radius-lg) var(--user-radius-lg) 0;
+}
+
+.highlight-box-about h4 {
+    color: var(--user-primary);
+    font-weight: var(--user-font-bold);
+    margin-bottom: var(--user-space-4);
+}
+
+.dishes-list-about {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: var(--user-space-3);
+}
+
+.dishes-list-about li {
+    display: flex;
+    align-items: center;
+    gap: var(--user-space-2);
+    font-weight: var(--user-font-medium);
+    color: var(--user-text-primary);
+}
+
+.dishes-list-about i {
+    color: var(--user-success);
+}
+
+.hotline-banner {
+    display: flex;
+    align-items: center;
+    gap: var(--user-space-4);
+    background: var(--user-gradient-accent);
+    color: var(--user-dark);
+    padding: var(--user-space-4) var(--user-space-6);
+    border-radius: var(--user-radius-lg);
+    margin-top: var(--user-space-6);
+}
+
+.hotline-banner i {
+    font-size: 32px;
+}
+
+.hotline-banner span {
+    display: block;
+    font-size: var(--user-font-sm);
+}
+
+.hotline-banner strong {
+    font-size: var(--user-font-2xl);
+}
+
+/* ============================================
+   FEATURES SECTION
+   ============================================ */
+
+.feature-image-wrapper {
+    border-radius: var(--user-radius-xl);
+    overflow: hidden;
+    box-shadow: var(--user-shadow-xl);
+    height: 100%;
+}
+
+.feature-image-wrapper img {
+    width: 100%;
+    height: 100%;
+    min-height: 400px;
+    object-fit: cover;
+    display: block;
+}
+
+.features-title {
+    font-size: var(--user-font-3xl);
+    font-weight: var(--user-font-bold);
+    color: var(--user-primary);
+    margin-bottom: var(--user-space-4);
+}
+
+.features-desc {
+    font-size: var(--user-font-lg);
+    color: var(--user-text-secondary);
+    line-height: var(--user-leading-relaxed);
+    margin-bottom: var(--user-space-6);
+}
+
+.feature-list-about {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.feature-list-about li {
+    display: flex;
+    gap: var(--user-space-4);
+    padding: var(--user-space-4) 0;
+    border-bottom: 1px solid var(--user-border-light);
+}
+
+.feature-list-about li:last-child {
+    border-bottom: none;
+}
+
+.feature-icon-about {
+    width: 40px;
+    height: 40px;
+    background: var(--user-gradient-primary);
+    color: white;
+    border-radius: var(--user-radius-full);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.feature-list-about strong {
+    display: block;
+    font-size: var(--user-font-lg);
+    color: var(--user-text-primary);
+    margin-bottom: var(--user-space-1);
+}
+
+.feature-list-about p {
+    margin: 0;
+    font-size: var(--user-font-sm);
+    color: var(--user-text-tertiary);
+}
+
+/* ============================================
+   CHEF SECTION
+   ============================================ */
+
+.chef-header-section {
+    text-align: center;
+    margin-bottom: var(--user-space-10);
+}
+
+.chef-header-section h2 {
+    font-size: var(--user-font-3xl);
+    font-weight: var(--user-font-bold);
+    color: var(--user-primary);
+    margin-bottom: var(--user-space-2);
+}
+
+.chef-header-section p {
+    color: var(--user-text-tertiary);
+    font-size: var(--user-font-lg);
+}
+
+.chef-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: var(--user-space-6);
+}
+
+.chef-item {
+    background: var(--user-bg-secondary);
+    padding: var(--user-space-8);
+    border-radius: var(--user-radius-xl);
+    text-align: center;
+    transition: all var(--user-transition-base);
+}
+
+.chef-item:hover {
+    transform: translateY(-8px);
+    box-shadow: var(--user-shadow-lg);
+}
+
+.chef-avatar-about {
+    width: 120px;
+    height: 120px;
+    margin: 0 auto var(--user-space-4);
+    background: var(--user-gradient-primary);
+    border-radius: var(--user-radius-full);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: var(--user-shadow-primary);
+}
+
+.chef-avatar-about i {
+    font-size: 64px;
+    color: white;
+}
+
+.chef-item h4 {
+    font-size: var(--user-font-xl);
+    font-weight: var(--user-font-bold);
+    color: var(--user-text-primary);
+    margin-bottom: var(--user-space-2);
+}
+
+.chef-role-about {
+    display: inline-block;
+    background: var(--user-primary-alpha-10);
+    color: var(--user-primary);
+    padding: var(--user-space-1) var(--user-space-3);
+    border-radius: var(--user-radius-full);
+    font-size: var(--user-font-sm);
+    font-weight: var(--user-font-semibold);
+    margin-bottom: var(--user-space-3);
+}
+
+.chef-item p {
+    color: var(--user-text-tertiary);
+    font-size: var(--user-font-sm);
+    line-height: var(--user-leading-relaxed);
+    margin: 0;
+}
+
+/* ============================================
+   GALLERY SECTION
+   ============================================ */
+
+.gallery-title {
+    font-size: var(--user-font-2xl);
+    font-weight: var(--user-font-bold);
+    color: var(--user-primary);
+    text-align: center;
+    margin-bottom: var(--user-space-8);
+}
+
+.gallery-grid-about {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: var(--user-space-4);
+}
+
+.gallery-item-about {
+    position: relative;
+    border-radius: var(--user-radius-lg);
+    overflow: hidden;
+    box-shadow: var(--user-shadow-base);
+    transition: all var(--user-transition-base);
+}
+
+.gallery-item-about:hover {
+    transform: translateY(-8px);
+    box-shadow: var(--user-shadow-xl);
+}
+
+.gallery-item-about img {
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+    display: block;
+    transition: transform var(--user-transition-base);
+}
+
+.gallery-item-about:hover img {
+    transform: scale(1.1);
+}
+
+.gallery-overlay {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: linear-gradient(to top, rgba(0, 0, 0, 0.8), transparent);
+    padding: var(--user-space-6) var(--user-space-4) var(--user-space-4);
+    color: white;
+}
+
+.gallery-overlay h4 {
+    margin: 0;
+    font-size: var(--user-font-base);
+    font-weight: var(--user-font-semibold);
+}
+
+/* ============================================
+   RESPONSIVE
+   ============================================ */
+
+@media (max-width: 1024px) {
+    .chef-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .gallery-grid-about {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 768px) {
+
+    .about-card,
+    .features-card,
+    .chef-card,
+    .gallery-card {
+        padding: var(--user-space-6);
+    }
+
+    .about-image-wrapper {
+        min-height: 300px;
+        margin-bottom: var(--user-space-6);
+    }
+
+    .feature-image-wrapper {
+        margin-bottom: var(--user-space-6);
+    }
+
+    .feature-image-wrapper img {
+        min-height: 300px;
+    }
+
+    .chef-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .gallery-grid-about {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .about-header h2,
+    .features-title,
+    .chef-header-section h2 {
+        font-size: var(--user-font-2xl);
+    }
+}
+
+@media (max-width: 576px) {
+    .dishes-list-about {
+        grid-template-columns: 1fr;
+    }
+
+    .hotline-banner {
+        flex-direction: column;
+        text-align: center;
+    }
+
+    .gallery-grid-about {
+        grid-template-columns: 1fr 1fr;
+        gap: var(--user-space-2);
+    }
+
+    .gallery-item-about img {
+        height: 150px;
+    }
+}

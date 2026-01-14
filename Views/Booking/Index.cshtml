@@ -1,0 +1,302 @@
+@model Web_QLNhaHang.Models.Booking
+@{
+    ViewData["Title"] = "Đặt bàn";
+}
+
+<!-- Hero Banner -->
+<section class="booking-hero" style="background: var(--user-gradient-hero), url('/images/banners/hero-banner.png'); background-size: cover; background-position: center;">
+    <div class="container-user">
+        <div class="booking-hero-content">
+            <h1><i class="fas fa-calendar-check me-3"></i>Đặt bàn trực tuyến</h1>
+            <p>Đặt bàn ngay để trải nghiệm ẩm thực tuyệt vời tại Nhà hàng Việt</p>
+        </div>
+    </div>
+</section>
+
+<!-- Main Content -->
+<section class="booking-section">
+    <div class="container-user">
+        <div class="booking-grid">
+            <!-- Left Sidebar - Contact Info -->
+            <aside class="booking-sidebar">
+                <div class="sidebar-card">
+                    <h3 class="sidebar-title">
+                        <i class="fas fa-info-circle me-2"></i>Thông tin liên hệ
+                    </h3>
+                    
+                    <div class="contact-list">
+                        <div class="contact-item-booking">
+                            <div class="contact-icon">
+                                <i class="fas fa-map-marker-alt"></i>
+                            </div>
+                            <div class="contact-info">
+                                <span class="contact-label">Địa chỉ</span>
+                                <p>123 Đường ABC, Quận 1<br>TP. Hồ Chí Minh</p>
+                            </div>
+                        </div>
+                        
+                        <div class="contact-item-booking">
+                            <div class="contact-icon">
+                                <i class="fas fa-clock"></i>
+                            </div>
+                            <div class="contact-info">
+                                <span class="contact-label">Giờ mở cửa</span>
+                                <p>10:30 - 22:00<br>Tất cả các ngày</p>
+                            </div>
+                        </div>
+                        
+                        <div class="contact-item-booking">
+                            <div class="contact-icon">
+                                <i class="fas fa-envelope"></i>
+                            </div>
+                            <div class="contact-info">
+                                <span class="contact-label">Email</span>
+                                <p>nhahangviet@gmail.com</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="hotline-card">
+                        <i class="fas fa-phone-volume hotline-icon"></i>
+                        <span class="hotline-label">Hotline đặt bàn</span>
+                        <h4 class="hotline-number">1800 2028</h4>
+                        <small>(Miễn phí cước gọi)</small>
+                    </div>
+                    
+                    <div class="sidebar-gallery">
+                        <img src="/images/dishes/ca-keo-muoi-ot.png" alt="Món ăn 1">
+                        <img src="/images/dishes/banh-trang-cuon.png" alt="Món ăn 2">
+                        <img src="/images/dishes/lau-ca-keo.png" alt="Món ăn 3">
+                        <img src="/images/dishes/vit-nuong-chao.png" alt="Món ăn 4">
+                        <img src="/images/dishes/lau-ga-la-giang.png" alt="Món ăn 5">
+                        <img src="/images/dishes/banh-xeo.png" alt="Món ăn 6">
+                    </div>
+                </div>
+            </aside>
+
+            <!-- Main Form -->
+            <main class="booking-main">
+                <div class="booking-form-card">
+                    <div class="form-header">
+                        <h2><i class="fas fa-edit me-2"></i>Điền thông tin đặt bàn</h2>
+                        <p>Vui lòng điền đầy đủ thông tin bên dưới để đặt bàn</p>
+                    </div>
+
+                    @if (TempData["SuccessMessage"] != null)
+                    {
+                        <div class="alert alert-success alert-dismissible fade show" role="alert">
+                            <i class="fas fa-check-circle me-2"></i> @TempData["SuccessMessage"]
+                            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                        </div>
+                    }
+                    
+                    @if (TempData["ErrorMessage"] != null)
+                    {
+                        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                            <i class="fas fa-exclamation-circle me-2"></i> @TempData["ErrorMessage"]
+                            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                        </div>
+                    }
+
+                    <form asp-controller="Booking" asp-action="Create" method="post" class="booking-form">
+                        <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+                        
+                        <!-- Contact Info -->
+                        <div class="form-section-booking">
+                            <h4 class="section-heading-booking">
+                                <span class="section-number">1</span>
+                                <i class="fas fa-user me-2"></i>Thông tin liên hệ
+                            </h4>
+                            <div class="row g-3">
+                                <div class="col-md-6">
+                                    <div class="form-floating-custom">
+                                        <input asp-for="CustomerName" class="form-input-booking" 
+                                               placeholder="Họ và tên *" required />
+                                        <label><i class="fas fa-user me-2"></i>Họ và tên *</label>
+                                    </div>
+                                    <span asp-validation-for="CustomerName" class="text-danger small"></span>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-floating-custom">
+                                        <input asp-for="CustomerPhone" class="form-input-booking" 
+                                               placeholder="Số điện thoại *" required />
+                                        <label><i class="fas fa-phone me-2"></i>Số điện thoại *</label>
+                                    </div>
+                                    <span asp-validation-for="CustomerPhone" class="text-danger small"></span>
+                                </div>
+                                <div class="col-12">
+                                    <div class="form-floating-custom">
+                                        <input asp-for="CustomerEmail" type="email" class="form-input-booking" 
+                                               placeholder="Email *" required />
+                                        <label><i class="fas fa-envelope me-2"></i>Email * (để nhận xác nhận đặt bàn)</label>
+                                    </div>
+                                    <span asp-validation-for="CustomerEmail" class="text-danger small"></span>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Guest Count -->
+                        <div class="form-section-booking">
+                            <h4 class="section-heading-booking">
+                                <span class="section-number">2</span>
+                                <i class="fas fa-users me-2"></i>Số lượng khách
+                            </h4>
+                            <div class="guest-selector">
+                                @for (int i = 1; i <= 10; i++)
+                                {
+                                    <button type="button" class="guest-btn-booking @(i == 2 ? "active" : "")" 
+                                            data-value="@i" onclick="selectGuests(this, @i)">@i</button>
+                                }
+                                <button type="button" class="guest-btn-booking guest-btn-more"
+                                        data-value="11" onclick="selectGuests(this, 11)">10+</button>
+                            </div>
+                            <input type="hidden" asp-for="NumberOfGuests" id="numberOfGuests" value="2" />
+                        </div>
+                        
+                        <!-- Date Time -->
+                        <div class="form-section-booking">
+                            <h4 class="section-heading-booking">
+                                <span class="section-number">3</span>
+                                <i class="fas fa-calendar-alt me-2"></i>Thời gian đến
+                            </h4>
+                            <input type="hidden" name="BookingDate" id="bookingDateHidden" />
+                            <div class="row g-4">
+                                <div class="col-md-6">
+                                    <div class="form-floating-custom">
+                                        <input type="date" class="form-input-booking" 
+                                               id="bookingDateInput"
+                                               value="@DateTime.Now.AddDays(1).ToString("yyyy-MM-dd")" 
+                                               min="@DateTime.Now.ToString("yyyy-MM-dd")" required />
+                                        <label><i class="fas fa-calendar me-2"></i>Chọn ngày</label>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-floating-custom">
+                                        <select class="form-input-booking" id="bookingTime" required>
+                                            <option value="">-- Chọn giờ --</option>
+                                            <option value="10:30">10:30</option>
+                                            <option value="11:00">11:00</option>
+                                            <option value="11:30">11:30</option>
+                                            <option value="12:00" selected>12:00</option>
+                                            <option value="12:30">12:30</option>
+                                            <option value="13:00">13:00</option>
+                                            <option value="17:00">17:00</option>
+                                            <option value="17:30">17:30</option>
+                                            <option value="18:00">18:00</option>
+                                            <option value="18:30">18:30</option>
+                                            <option value="19:00">19:00</option>
+                                            <option value="19:30">19:30</option>
+                                            <option value="20:00">20:00</option>
+                                            <option value="20:30">20:30</option>
+                                            <option value="21:00">21:00</option>
+                                        </select>
+                                        <label><i class="fas fa-clock me-2"></i>Chọn giờ</label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Table Selection -->
+                        <div class="form-section-booking">
+                            <h4 class="section-heading-booking">
+                                <span class="section-number">4</span>
+                                <i class="fas fa-chair me-2"></i>Khu vực / Bàn (Tùy chọn)
+                            </h4>
+                            <div class="form-floating-custom">
+                                <select asp-for="TableId" class="form-input-booking" asp-items="ViewBag.TableId">
+                                    <option value="">-- Để nhà hàng sắp xếp --</option>
+                                </select>
+                                <label><i class="fas fa-table me-2"></i>Chọn bàn</label>
+                            </div>
+                            <small class="form-hint">Nếu không chọn, nhà hàng sẽ sắp xếp bàn phù hợp cho bạn</small>
+                        </div>
+                        
+                        <!-- Notes -->
+                        <div class="form-section-booking">
+                            <h4 class="section-heading-booking">
+                                <span class="section-number">5</span>
+                                <i class="fas fa-comment-dots me-2"></i>Ghi chú
+                            </h4>
+                            <div class="form-floating-custom">
+                                <textarea asp-for="Notes" class="form-input-booking form-textarea" rows="3" 
+                                          placeholder="Ghi chú..."></textarea>
+                                <label><i class="fas fa-sticky-note me-2"></i>Yêu cầu đặc biệt</label>
+                            </div>
+                            <small class="form-hint">Ví dụ: Ghế trẻ em, trang trí sinh nhật, dị ứng thực phẩm...</small>
+                        </div>
+                        
+                        <!-- Submit -->
+                        <button type="submit" class="btn-user btn-user-primary btn-user-block btn-user-xl btn-submit-booking">
+                            <i class="fas fa-paper-plane me-2"></i>Xác nhận đặt bàn
+                        </button>
+                    </form>
+                </div>
+            </main>
+        </div>
+
+        <!-- Features Section -->
+        <div class="booking-features">
+            <div class="features-grid">
+                <div class="feature-item">
+                    <div class="feature-icon-booking">
+                        <i class="fas fa-utensils"></i>
+                    </div>
+                    <h5>Ẩm thực đặc sắc</h5>
+                    <p>Món ăn truyền thống được chế biến bởi đầu bếp giàu kinh nghiệm</p>
+                </div>
+                <div class="feature-item">
+                    <div class="feature-icon-booking">
+                        <i class="fas fa-couch"></i>
+                    </div>
+                    <h5>Không gian sang trọng</h5>
+                    <p>Thiết kế ấm cúng, phù hợp cho gia đình và tiệc công ty</p>
+                </div>
+                <div class="feature-item">
+                    <div class="feature-icon-booking">
+                        <i class="fas fa-heart"></i>
+                    </div>
+                    <h5>Phục vụ tận tâm</h5>
+                    <p>Đội ngũ nhân viên chuyên nghiệp, luôn sẵn sàng phục vụ</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+@section Styles {
+    <link rel="stylesheet" href="~/css/user-booking.css" asp-append-version="true" />
+}
+
+@section Scripts {
+    <script>
+        function selectGuests(btn, value) {
+            document.querySelectorAll('.guest-btn-booking').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            document.getElementById('numberOfGuests').value = value;
+        }
+
+        // Highlight số khách mặc định khi trang load
+        document.addEventListener('DOMContentLoaded', function() {
+            var defaultValue = document.getElementById('numberOfGuests').value || 2;
+            var buttons = document.querySelectorAll('.guest-btn-booking');
+            buttons.forEach(function(btn) {
+                var btnValue = btn.getAttribute('data-value');
+                if (btnValue == defaultValue) {
+                    btn.classList.add('active');
+                }
+            });
+        });
+
+        // Combine date and time for BookingDate into hidden field
+        document.querySelector('form').addEventListener('submit', function(e) {
+            var dateInput = document.getElementById('bookingDateInput');
+            var timeSelect = document.getElementById('bookingTime');
+            var hiddenField = document.getElementById('bookingDateHidden');
+            if (dateInput.value && timeSelect.value) {
+                hiddenField.value = dateInput.value + 'T' + timeSelect.value;
+            } else if (dateInput.value) {
+                hiddenField.value = dateInput.value + 'T12:00';
+            }
+        });
+    </script>
+}

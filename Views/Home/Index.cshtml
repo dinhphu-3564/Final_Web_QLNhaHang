@@ -1,0 +1,568 @@
+@model dynamic
+@{
+    ViewData["Title"] = "Trang chủ - Nhà hàng Việt";
+}
+
+<!-- Hero Slider -->
+<section class="hero-slider" id="heroSlider">
+    <div class="slider-container">
+        <div class="slider-track" id="sliderTrack">
+            <!-- Slide 1 -->
+            <div class="slide active">
+                <img src="/images/banners/hero-banner.png" alt="Ẩm thực Việt Nam">
+                <div class="slide-overlay"></div>
+                <div class="slide-content">
+                    <h2 class="slide-title">
+                        Hương vị <span>Việt Nam</span><br>chính gốc
+                    </h2>
+                    <p class="slide-desc">
+                        Trải nghiệm ẩm thực đậm đà bản sắc miền Nam Bộ với gần 100 món ăn đặc sắc
+                    </p>
+                    <a asp-controller="Menu" asp-action="Index" class="slide-btn">
+                        <i class="fas fa-utensils"></i> Xem thực đơn
+                    </a>
+                </div>
+            </div>
+            
+            <!-- Slide 2 -->
+            <div class="slide">
+                <img src="/images/dishes/lau-ca-keo.png" alt="Lẩu cá kèo">
+                <div class="slide-overlay"></div>
+                <div class="slide-content">
+                    <h2 class="slide-title">
+                        <span>Lẩu mắm</span> cá kèo<br>đặc sản miền Tây
+                    </h2>
+                    <p class="slide-desc">
+                        Món ăn đậm chất vùng sông nước, ngon ngọt tự nhiên, cuốn hút mọi thực khách
+                    </p>
+                    <a asp-controller="Menu" asp-action="Index" class="slide-btn">
+                        <i class="fas fa-fire"></i> Đặt món ngay
+                    </a>
+                </div>
+            </div>
+            
+            <!-- Slide 3 -->
+            <div class="slide">
+                <img src="/images/dishes/banh-xeo.png" alt="Bánh xèo">
+                <div class="slide-overlay"></div>
+                <div class="slide-content">
+                    <h2 class="slide-title">
+                        <span>Đặt bàn</span> tiện lợi<br>ưu đãi hấp dẫn
+                    </h2>
+                    <p class="slide-desc">
+                        Không gian ấm cúng, phục vụ tận tâm. Gọi ngay 1800 2028 để đặt bàn
+                    </p>
+                    <a asp-controller="Booking" asp-action="Index" class="slide-btn">
+                        <i class="fas fa-calendar-check"></i> Đặt bàn ngay
+                    </a>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Navigation Arrows -->
+        <button class="slider-nav prev" onclick="changeSlide(-1)">
+            <i class="fas fa-chevron-left"></i>
+        </button>
+        <button class="slider-nav next" onclick="changeSlide(1)">
+            <i class="fas fa-chevron-right"></i>
+        </button>
+        
+        <!-- Dots -->
+        <div class="slider-dots">
+            <span class="slider-dot active" onclick="goToSlide(0)"></span>
+            <span class="slider-dot" onclick="goToSlide(1)"></span>
+            <span class="slider-dot" onclick="goToSlide(2)"></span>
+        </div>
+    </div>
+</section>
+
+<!-- Quick Features -->
+<section class="quick-features">
+    <div class="container">
+        <div class="features-grid">
+            <div class="feature-item">
+                <div class="feature-icon">
+                    <i class="fas fa-shipping-fast"></i>
+                </div>
+                <div class="feature-text">
+                    <strong>Giao hàng nhanh 30 phút</strong>
+                    <span>Miễn phí ship từ 150.000đ</span>
+                </div>
+            </div>
+            
+            <div class="feature-item">
+                <div class="feature-icon">
+                    <i class="fas fa-leaf"></i>
+                </div>
+                <div class="feature-text">
+                    <strong>Nguyên liệu tươi sạch</strong>
+                    <span>Chọn lọc kỹ càng mỗi ngày</span>
+                </div>
+            </div>
+            
+            <div class="feature-item">
+                <div class="feature-icon">
+                    <i class="fas fa-award"></i>
+                </div>
+                <div class="feature-text">
+                    <strong>Đầu bếp chuyên nghiệp</strong>
+                    <span>Hơn 20 năm kinh nghiệm</span>
+                </div>
+            </div>
+            
+            <div class="feature-item">
+                <div class="feature-icon">
+                    <i class="fas fa-shield-alt"></i>
+                </div>
+                <div class="feature-text">
+                    <strong>An toàn thực phẩm</strong>
+                    <span>Đạt chuẩn vệ sinh ATTP</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Menu Categories Section -->
+<section class="category-section">
+    <div class="container">
+        <div class="category-header">
+            <h2>Bạn muốn ăn gì?</h2>
+            <p>Khám phá các danh mục món ăn đặc sắc của chúng tôi</p>
+        </div>
+        
+        <div class="category-grid">
+            <div class="category-card">
+                <img src="/images/dishes/lau-ca-keo.png" alt="Lẩu">
+                <div class="category-card-overlay">
+                    <h3>Các món Lẩu</h3>
+                    <span>10+ món</span>
+                </div>
+                <a asp-controller="Menu" asp-action="Index" asp-route-categoryId="1" class="category-card-link"></a>
+            </div>
+            
+            <div class="category-card">
+                <img src="/images/dishes/banh-trang-cuon.png" alt="Cuốn">
+                <div class="category-card-overlay">
+                    <h3>Bánh tráng cuốn</h3>
+                    <span>8+ món</span>
+                </div>
+                <a asp-controller="Menu" asp-action="Index" asp-route-categoryId="2" class="category-card-link"></a>
+            </div>
+            
+            <div class="category-card">
+                <img src="/images/dishes/vit-nuong-chao.png" alt="Nướng">
+                <div class="category-card-overlay">
+                    <h3>Món nướng</h3>
+                    <span>12+ món</span>
+                </div>
+                <a asp-controller="Menu" asp-action="Index" asp-route-categoryId="3" class="category-card-link"></a>
+            </div>
+            
+            <div class="category-card">
+                <img src="/images/dishes/banh-xeo.png" alt="Đặc sản">
+                <div class="category-card-overlay">
+                    <h3>Món đặc sản</h3>
+                    <span>15+ món</span>
+                </div>
+                <a asp-controller="Menu" asp-action="Index" asp-route-categoryId="4" class="category-card-link"></a>
+            </div>
+            
+            <div class="category-card">
+                <img src="/images/dishes/ca-keo-muoi-ot.png" alt="Món nhẹ">
+                <div class="category-card-overlay">
+                    <h3>Món ăn nhẹ</h3>
+                    <span>8+ món</span>
+                </div>
+                <a asp-controller="Menu" asp-action="Index" asp-route-categoryId="5" class="category-card-link"></a>
+            </div>
+            
+            <div class="category-card">
+                <img src="/images/dishes/lau-ga-la-giang.png" alt="Gà">
+                <div class="category-card-overlay">
+                    <h3>Món gà</h3>
+                    <span>6+ món</span>
+                </div>
+                <a asp-controller="Menu" asp-action="Index" asp-route-categoryId="6" class="category-card-link"></a>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Featured Menu Section -->
+<section class="menu-section">
+    <div class="container">
+        <div class="section-header">
+            <span class="badge-text">Món ngon nổi bật</span>
+            <h2>Thực đơn đặc sắc</h2>
+            <p>Những món ăn được yêu thích nhất tại Nhà hàng Việt</p>
+            <div class="divider"></div>
+        </div>
+        
+        <div class="dish-grid">
+            @if (ViewBag.FeaturedDishes != null && ((List<Web_QLNhaHang.Models.Dish>)ViewBag.FeaturedDishes).Any())
+            {
+                @foreach (var dish in ((List<Web_QLNhaHang.Models.Dish>)ViewBag.FeaturedDishes).Take(8))
+                {
+                    <div class="dish-card-modern">
+                        <div class="dish-card-image">
+                            @if (!string.IsNullOrEmpty(dish.ImageUrl))
+                            {
+                                <a asp-controller="Menu" asp-action="Details" asp-route-id="@dish.DishId">
+                                    <img src="@dish.ImageUrl" alt="@dish.DishName">
+                                </a>
+                            }
+                            else
+                            {
+                                <div style="width: 100%; height: 100%; background: var(--bg-light); display: flex; align-items: center; justify-content: center;">
+                                    <i class="fas fa-utensils" style="font-size: 48px; color: var(--text-light);"></i>
+                                </div>
+                            }
+                            
+                            @if (dish.IsFeatured)
+                            {
+                                <span class="dish-card-badge">
+                                    <i class="fas fa-fire"></i> Hot
+                                </span>
+                            }
+                            
+                            <div class="dish-card-wishlist">
+                                <i class="far fa-heart"></i>
+                            </div>
+                        </div>
+                        
+                        <div class="dish-card-body">
+                            <span class="dish-card-category">@(dish.Category?.CategoryName ?? "Món đặc trưng")</span>
+                            <h3 class="dish-card-title">
+                                <a asp-controller="Menu" asp-action="Details" asp-route-id="@dish.DishId">@dish.DishName</a>
+                            </h3>
+                            <p class="dish-card-desc">@dish.Description</p>
+                            
+                            <div class="dish-card-footer">
+                                <span class="dish-card-price">@dish.Price.ToString("N0")₫</span>
+                                <button class="dish-card-add" onclick="addToCart(@dish.DishId)" title="Thêm vào giỏ">
+                                    <i class="fas fa-plus"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                }
+            }
+            else
+            {
+                <!-- Fallback dishes -->
+                <div class="dish-card-modern">
+                    <div class="dish-card-image">
+                        <img src="/images/dishes/ca-keo-muoi-ot.png" alt="Cá kèo muối ớt">
+                        <span class="dish-card-badge"><i class="fas fa-fire"></i> Hot</span>
+                        <div class="dish-card-wishlist"><i class="far fa-heart"></i></div>
+                    </div>
+                    <div class="dish-card-body">
+                        <span class="dish-card-category">Món chiên</span>
+                        <h3 class="dish-card-title"><a href="#">Cá kèo muối ớt</a></h3>
+                        <p class="dish-card-desc">Cá kèo tươi chiên giòn, thấm vị muối ớt cay nồng đặc trưng miền Tây</p>
+                        <div class="dish-card-footer">
+                            <span class="dish-card-price">189,000₫</span>
+                            <button class="dish-card-add"><i class="fas fa-plus"></i></button>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="dish-card-modern">
+                    <div class="dish-card-image">
+                        <img src="/images/dishes/banh-trang-cuon.png" alt="Bánh tráng cuốn">
+                        <span class="dish-card-badge"><i class="fas fa-star"></i> Bán chạy</span>
+                        <div class="dish-card-wishlist"><i class="far fa-heart"></i></div>
+                    </div>
+                    <div class="dish-card-body">
+                        <span class="dish-card-category">Món cuốn</span>
+                        <h3 class="dish-card-title"><a href="#">Bánh tráng cuốn thịt heo</a></h3>
+                        <p class="dish-card-desc">Bánh tráng cuốn ba chỉ quay giòn cùng rau sống tươi ngon</p>
+                        <div class="dish-card-footer">
+                            <span class="dish-card-price">159,000₫</span>
+                            <button class="dish-card-add"><i class="fas fa-plus"></i></button>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="dish-card-modern">
+                    <div class="dish-card-image">
+                        <img src="/images/dishes/lau-ga-la-giang.png" alt="Lẩu gà lá giang">
+                        <div class="dish-card-wishlist"><i class="far fa-heart"></i></div>
+                    </div>
+                    <div class="dish-card-body">
+                        <span class="dish-card-category">Lẩu</span>
+                        <h3 class="dish-card-title"><a href="#">Lẩu gà lá giang</a></h3>
+                        <p class="dish-card-desc">Gà ta thả vườn nấu với lá giang chua thanh mát lành</p>
+                        <div class="dish-card-footer">
+                            <span class="dish-card-price">269,000₫</span>
+                            <button class="dish-card-add"><i class="fas fa-plus"></i></button>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="dish-card-modern">
+                    <div class="dish-card-image">
+                        <img src="/images/dishes/banh-xeo.png" alt="Bánh xèo">
+                        <div class="dish-card-wishlist"><i class="far fa-heart"></i></div>
+                    </div>
+                    <div class="dish-card-body">
+                        <span class="dish-card-category">Bánh</span>
+                        <h3 class="dish-card-title"><a href="#">Bánh xèo miền Tây</a></h3>
+                        <p class="dish-card-desc">Bánh xèo vỏ giòn rụm, nhân tôm thịt thơm ngon béo ngậy</p>
+                        <div class="dish-card-footer">
+                            <span class="dish-card-price">129,000₫</span>
+                            <button class="dish-card-add"><i class="fas fa-plus"></i></button>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+        
+        <div class="text-center mt-5">
+            <a asp-controller="Menu" asp-action="Index" class="btn-primary-custom btn-lg">
+                <i class="fas fa-utensils me-2"></i>
+                Xem toàn bộ thực đơn
+                <i class="fas fa-arrow-right ms-2"></i>
+            </a>
+        </div>
+    </div>
+</section>
+
+<!-- Why Choose Us -->
+<section class="why-us-section">
+    <div class="container">
+        <div class="section-header">
+            <span class="badge-text">Tại sao chọn chúng tôi</span>
+            <h2>Trải nghiệm khác biệt</h2>
+            <p>Những giá trị tạo nên thương hiệu Nhà hàng Việt</p>
+            <div class="divider"></div>
+        </div>
+        
+        <div class="why-us-grid">
+            <div class="why-us-card">
+                <div class="why-us-icon">
+                    <i class="fas fa-seedling"></i>
+                </div>
+                <h4>Nguyên liệu tươi ngon</h4>
+                <p>Tất cả nguyên liệu được tuyển chọn kỹ lưỡng, đảm bảo tươi sạch và nguồn gốc rõ ràng mỗi ngày</p>
+            </div>
+            
+            <div class="why-us-card">
+                <div class="why-us-icon">
+                    <i class="fas fa-utensils"></i>
+                </div>
+                <h4>Đầu bếp tâm huyết</h4>
+                <p>Đội ngũ đầu bếp với hơn 20 năm kinh nghiệm, mang đến những món ăn đậm chất truyền thống</p>
+            </div>
+            
+            <div class="why-us-card">
+                <div class="why-us-icon">
+                    <i class="fas fa-glass-cheers"></i>
+                </div>
+                <h4>Không gian ấm cúng</h4>
+                <p>Thiết kế theo phong cách Việt Nam truyền thống, phù hợp cho gia đình và tiệc họp mặt</p>
+            </div>
+            
+            <div class="why-us-card">
+                <div class="why-us-icon">
+                    <i class="fas fa-heart"></i>
+                </div>
+                <h4>Phục vụ tận tâm</h4>
+                <p>Đội ngũ nhân viên chuyên nghiệp, thân thiện, luôn sẵn sàng phục vụ quý khách</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- CTA Section -->
+<section class="cta-section">
+    <div class="container">
+        <div class="cta-content">
+            <h2>Đặt món ngay - Miễn phí giao hàng</h2>
+            <p>Đơn hàng từ 150.000đ được miễn phí ship trong bán kính 5km</p>
+            
+            <div class="cta-buttons">
+                <a asp-controller="Menu" asp-action="Index" class="btn-secondary-custom btn-xl" style="background: white; border-color: white;">
+                    <i class="fas fa-motorcycle"></i>
+                    Đặt ship giao tận nơi
+                </a>
+                <a asp-controller="Booking" asp-action="Index" class="btn-outline-custom btn-xl">
+                    <i class="fas fa-calendar-check"></i>
+                    Đặt bàn tại nhà hàng
+                </a>
+            </div>
+            
+            <div class="cta-hotline">
+                <div class="cta-hotline-icon">
+                    <i class="fas fa-phone-alt"></i>
+                </div>
+                <div class="cta-hotline-text">
+                    <small>Hotline đặt bàn (Miễn phí)</small>
+                    <strong>1800 - 2028</strong>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Booking Section -->
+<section class="booking-section">
+    <div class="container">
+        <div class="booking-content">
+            <div class="row align-items-center">
+                <div class="col-lg-6 mb-5 mb-lg-0">
+                    <div class="booking-info">
+                        <h2>Đặt bàn trực tuyến</h2>
+                        <p>Đặt bàn trước để có trải nghiệm tốt nhất. Chúng tôi sẽ chuẩn bị chu đáo cho bữa tiệc của bạn.</p>
+                        
+                        <ul class="booking-features">
+                            <li><i class="fas fa-check"></i> Xác nhận đặt bàn ngay lập tức</li>
+                            <li><i class="fas fa-check"></i> Không cần đặt cọc trước</li>
+                            <li><i class="fas fa-check"></i> Hỗ trợ đặt tiệc lớn từ 20 người</li>
+                            <li><i class="fas fa-check"></i> Trang trí sinh nhật, kỷ niệm theo yêu cầu</li>
+                        </ul>
+                        
+                        <a asp-controller="Booking" asp-action="Index" class="btn-primary-custom btn-xl" style="background: var(--accent); border-color: var(--accent);">
+                            <i class="fas fa-calendar-check me-2"></i>
+                            Đặt bàn ngay
+                        </a>
+                    </div>
+                </div>
+                
+                <div class="col-lg-6">
+                    <div style="background: white; border-radius: var(--radius-2xl); padding: var(--space-8); box-shadow: var(--shadow-xl);">
+                        <h4 style="color: var(--secondary); margin-bottom: var(--space-6); text-align: center;">
+                            <i class="fas fa-clock me-2" style="color: var(--primary);"></i>
+                            Giờ mở cửa
+                        </h4>
+                        <div class="d-flex justify-content-between align-items-center py-3 border-bottom">
+                            <span style="color: var(--text-secondary);">Thứ 2 - Thứ 6</span>
+                            <strong style="color: var(--secondary);">10:30 - 22:00</strong>
+                        </div>
+                        <div class="d-flex justify-content-between align-items-center py-3 border-bottom">
+                            <span style="color: var(--text-secondary);">Thứ 7 - Chủ nhật</span>
+                            <strong style="color: var(--secondary);">10:00 - 23:00</strong>
+                        </div>
+                        <div class="d-flex justify-content-between align-items-center py-3">
+                            <span style="color: var(--text-secondary);">Ngày lễ</span>
+                            <strong style="color: var(--primary);">Mở cửa bình thường</strong>
+                        </div>
+                        
+                        <div class="text-center mt-4 pt-4 border-top">
+                            <p style="color: var(--text-muted); margin-bottom: var(--space-2);">Liên hệ đặt bàn</p>
+                            <a href="tel:18002028" style="font-size: var(--text-2xl); font-weight: var(--font-bold); color: var(--primary); text-decoration: none;">
+                                <i class="fas fa-phone-alt me-2"></i>1800 2028
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+@section Styles {
+    <link rel="stylesheet" href="~/css/user-homepage.css" asp-append-version="true" />
+}
+
+@section Scripts {
+    <script>
+        function addToCart(dishId) {
+            $.ajax({
+                url: '/Cart/AddToCart',
+                type: 'POST',
+                data: { dishId: dishId, quantity: 1 },
+                success: function(data) {
+                    if (data && data.success) {
+                        updateCartCount(data.cartCount || 0);
+                        showToast('Đã thêm món vào giỏ hàng!', 'success');
+                    } else {
+                        showToast(data.message || 'Có lỗi xảy ra', 'error');
+                    }
+                },
+                error: function() {
+                    showToast('Có lỗi kết nối. Vui lòng thử lại!', 'error');
+                }
+            });
+        }
+
+        // Wishlist toggle
+        $(document).on('click', '.dish-card-wishlist', function(e) {
+            e.preventDefault();
+            $(this).toggleClass('active');
+            var icon = $(this).find('i');
+            if ($(this).hasClass('active')) {
+                icon.removeClass('far').addClass('fas');
+                showToast('Đã thêm vào yêu thích!', 'success');
+            } else {
+                icon.removeClass('fas').addClass('far');
+            }
+        });
+
+        // Animate on scroll
+        $(window).scroll(function() {
+            $('.dish-card-modern, .why-us-card, .feature-item, .category-card').each(function() {
+                var elementTop = $(this).offset().top;
+                var elementVisible = 150;
+                var windowHeight = $(window).height();
+                var scrollTop = $(window).scrollTop();
+
+                if (elementTop < scrollTop + windowHeight - elementVisible) {
+                    $(this).addClass('animate-fadeInUp');
+                }
+            });
+        });
+        
+        // ===== HERO SLIDER =====
+        var currentSlide = 0;
+        var totalSlides = 3;
+        var autoplayInterval;
+        
+        function updateSlider() {
+            var track = document.getElementById('sliderTrack');
+            if (track) {
+                track.style.transform = 'translateX(-' + (currentSlide * 100) + '%)';
+            }
+            
+            // Update dots
+            document.querySelectorAll('.slider-dot').forEach(function(dot, index) {
+                dot.classList.toggle('active', index === currentSlide);
+            });
+        }
+        
+        function changeSlide(direction) {
+            currentSlide += direction;
+            if (currentSlide < 0) currentSlide = totalSlides - 1;
+            if (currentSlide >= totalSlides) currentSlide = 0;
+            updateSlider();
+            resetAutoplay();
+        }
+        
+        function goToSlide(index) {
+            currentSlide = index;
+            updateSlider();
+            resetAutoplay();
+        }
+        
+        function startAutoplay() {
+            autoplayInterval = setInterval(function() {
+                changeSlide(1);
+            }, 5000);
+        }
+        
+        function resetAutoplay() {
+            clearInterval(autoplayInterval);
+            startAutoplay();
+        }
+        
+        // Start autoplay on page load
+        startAutoplay();
+        
+        // Pause on hover
+        $('#heroSlider').hover(
+            function() { clearInterval(autoplayInterval); },
+            function() { startAutoplay(); }
+        );
+    </script>
+}

@@ -1,0 +1,116 @@
+@model List<Web_QLNhaHang.Models.Order>
+@{
+    ViewData["Title"] = "Đơn hàng của tôi";
+}
+
+<!-- Page Banner -->
+<div class="page-banner-user">
+    <div class="container-user">
+        <h1 class="page-banner-title"><i class="fas fa-shopping-bag me-3"></i>Đơn hàng của tôi</h1>
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb-user">
+                <li class="breadcrumb-item-user"><a asp-controller="Home" asp-action="Index">Trang chủ</a></li>
+                <li class="breadcrumb-item-user active" aria-current="page">Đơn hàng của tôi</li>
+            </ol>
+        </nav>
+    </div>
+</div>
+
+<section class="orders-section">
+    <div class="container-user">
+        @if (Model != null && Model.Any())
+        {
+            <div class="orders-card">
+                <div class="orders-header">
+                    <div class="orders-header-title">
+                        <i class="fas fa-history me-2"></i>Lịch sử đơn hàng
+                    </div>
+                    <span class="orders-count">@Model.Count đơn hàng</span>
+                </div>
+                <div class="orders-body">
+                    @foreach (var order in Model)
+                    {
+                        <div class="order-item">
+                            <div class="order-item-header">
+                                <div class="order-number">
+                                    <strong>@order.OrderNumber</strong>
+                                    <span class="order-date">@order.OrderDate.ToString("dd/MM/yyyy HH:mm")</span>
+                                </div>
+                                <div class="order-amount">@order.TotalAmount.ToString("N0") ₫</div>
+                            </div>
+                            <div class="order-item-body">
+                                <div class="order-badges">
+                                    @{
+                                        var statusBadgeClass = order.Status switch
+                                        {
+                                            "Hoàn thành" => "badge-success-profile",
+                                            "Hủy" => "badge-danger-profile",
+                                            _ => "badge-warning-profile"
+                                        };
+                                    }
+                                    <span class="badge-profile @statusBadgeClass">
+                                        @order.Status
+                                    </span>
+
+                                    @{
+                                        var paymentBadgeClass = order.PaymentStatus == "Đã thanh toán" ? "badge-success-profile" : "badge-secondary-profile";
+                                    }
+                                    <span class="badge-profile @paymentBadgeClass">
+                                        <i class="fas @(order.PaymentStatus == "Đã thanh toán" ? "fa-check-circle" : "fa-clock") me-1"></i>
+                                        @order.PaymentStatus
+                                    </span>
+
+                                    @if (order.PaymentMethod == "VNPay")
+                                    {
+                                        <span class="badge-profile badge-vnpay">
+                                            <i class="fas fa-university me-1"></i>VNPay
+                                        </span>
+                                    }
+                                    else if (order.PaymentMethod == "MoMo")
+                                    {
+                                        <span class="badge-profile badge-momo">
+                                            <i class="fas fa-wallet me-1"></i>Ví MoMo
+                                        </span>
+                                    }
+                                    else if (order.PaymentMethod == "MoMoATM")
+                                    {
+                                        <span class="badge-profile badge-momo">
+                                            <i class="fas fa-credit-card me-1"></i>MoMo ATM
+                                        </span>
+                                    }
+                                    else
+                                    {
+                                        <span class="badge-profile badge-cod">
+                                            <i class="fas fa-money-bill-wave me-1"></i>Tiền mặt
+                                        </span>
+                                    }
+                                </div>
+                                <a asp-action="OrderSuccess" asp-route-orderNumber="@order.OrderNumber" 
+                                   class="btn-user btn-user-sm btn-user-secondary">
+                                    <i class="fas fa-eye me-1"></i>Xem chi tiết
+                                </a>
+                            </div>
+                        </div>
+                    }
+                </div>
+            </div>
+        }
+        else
+        {
+            <div class="empty-orders">
+                <div class="empty-orders-icon">
+                    <i class="fas fa-shopping-bag"></i>
+                </div>
+                <h3>Chưa có đơn hàng nào</h3>
+                <p>Bạn chưa đặt đơn hàng nào. Hãy khám phá menu của chúng tôi!</p>
+                <a asp-controller="Menu" asp-action="Index" class="btn-user btn-user-primary btn-user-lg">
+                    <i class="fas fa-utensils me-2"></i>Xem menu
+                </a>
+            </div>
+        }
+    </div>
+</section>
+
+@section Styles {
+    <link rel="stylesheet" href="~/css/user-profile.css" asp-append-version="true" />
+}

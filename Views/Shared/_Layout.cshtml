@@ -1,0 +1,409 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="Nhà hàng Việt - Chuyên các món ăn đậm chất Việt Nam, lẩu, nướng, cuốn và các món đặc sản truyền thống." />
+    <title>@ViewData["Title"] - Nhà hàng Việt</title>
+    
+    <!-- Bootstrap 5 -->
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&family=Playfair+Display:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Custom Theme CSS -->
+    <link rel="stylesheet" href="~/css/user-variables.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/user-components.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/user-slider.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/user-theme.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    
+    @await RenderSectionAsync("Styles", required: false)
+</head>
+<body>
+    <!-- Top Bar -->
+    <div class="top-bar d-none d-md-block">
+        <div class="container">
+            <div class="d-flex justify-content-between align-items-center">
+                <div class="d-flex align-items-center gap-4">
+                    <span><i class="fas fa-phone-alt me-2"></i>Hotline: <strong>1800 2028</strong> (Miễn phí)</span>
+                    <span class="d-none d-lg-inline"><i class="fas fa-clock me-2"></i>10:30 - 22:00</span>
+                </div>
+                <div class="d-flex align-items-center gap-4">
+                    <span><i class="fas fa-map-marker-alt me-2"></i>Hệ thống 3 cơ sở tại TP.HCM</span>
+                    <div class="d-flex gap-3">
+                        <a href="#" title="Facebook"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#" title="Instagram"><i class="fab fa-instagram"></i></a>
+                        <a href="#" title="Youtube"><i class="fab fa-youtube"></i></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Header -->
+    <header class="main-header">
+        <div class="container">
+            <div class="header-wrapper">
+                <!-- Logo -->
+                <a class="header-logo" asp-controller="Home" asp-action="Index">
+                    <div class="logo-icon-wrapper" style="width: 50px; height: 50px; background: var(--gradient-primary); border-radius: var(--radius-lg); display: flex; align-items: center; justify-content: center;">
+                        <i class="fas fa-utensils" style="font-size: 1.5rem; color: white;"></i>
+                    </div>
+                    <div class="logo-text">
+                        <span class="logo-title">Nhà hàng Việt</span>
+                        <span class="logo-subtitle">Món ngon Việt Nam</span>
+                    </div>
+                </a>
+
+                <!-- Main Menu -->
+                <nav class="main-nav">
+                    <ul class="nav-menu">
+                        <li><a asp-controller="Home" asp-action="Index"><i class="fas fa-home me-1"></i> Trang chủ</a></li>
+                        <li><a asp-controller="Menu" asp-action="Index"><i class="fas fa-utensils me-1"></i> Thực đơn</a></li>
+                        <li><a href="/Booking"><i class="fas fa-calendar-check me-1"></i> Đặt bàn</a></li>
+                        <li><a asp-controller="Home" asp-action="About"><i class="fas fa-info-circle me-1"></i> Giới thiệu</a></li>
+                        <li><a asp-controller="Home" asp-action="Contact"><i class="fas fa-phone me-1"></i> Liên hệ</a></li>
+                    </ul>
+                </nav>
+
+                <!-- Header Right -->
+                <div class="header-right">
+                    <div class="header-search d-none d-lg-flex">
+                        <input type="text" placeholder="Tìm món ăn..." />
+                        <button type="button"><i class="fas fa-search"></i></button>
+                    </div>
+                    
+                    @if (Context.Session.GetInt32("CustomerId") != null)
+                    {
+                        <div class="dropdown">
+                            <button class="header-login dropdown-toggle" type="button" id="userDropdown" data-bs-toggle="dropdown" data-bs-auto-close="true" aria-expanded="false">
+                                <div style="width: 36px; height: 36px; background: var(--gradient-primary); border-radius: var(--radius-full); display: flex; align-items: center; justify-content: center; color: white;">
+                                    <i class="fas fa-user"></i>
+                                </div>
+                                <span class="d-none d-md-inline">@Context.Session.GetString("CustomerName")</span>
+                                <i class="fas fa-chevron-down" style="font-size: 0.7rem;"></i>
+                            </button>
+                            <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
+                                <li>
+                                    <a class="dropdown-item" asp-controller="Account" asp-action="Profile">
+                                        <i class="fas fa-user-circle me-2"></i>Tài khoản của tôi
+                                    </a>
+                                </li>
+                                <li>
+                                    <a class="dropdown-item" asp-controller="Order" asp-action="MyOrders">
+                                        <i class="fas fa-shopping-bag me-2"></i>Đơn hàng
+                                    </a>
+                                </li>
+                                <li>
+                                    <a class="dropdown-item" asp-controller="Booking" asp-action="CheckStatus">
+                                        <i class="fas fa-calendar-alt me-2"></i>Đặt bàn của tôi
+                                    </a>
+                                </li>
+                                <li><hr class="dropdown-divider"></li>
+                                <li>
+                                    <a class="dropdown-item" asp-controller="Account" asp-action="Logout">
+                                        <i class="fas fa-sign-out-alt me-2"></i>Đăng xuất
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    }
+                    else
+                    {
+                        <a asp-controller="Account" asp-action="Login" class="header-login">
+                            <i class="fas fa-user-circle"></i>
+                            <span class="d-none d-md-inline">Đăng nhập</span>
+                        </a>
+                    }
+
+                    <a asp-controller="Cart" asp-action="Index" class="header-cart">
+                        <i class="fas fa-shopping-cart"></i>
+                        <span id="cartCount" class="cart-count">0</span>
+                    </a>
+
+                    <!-- Mobile Toggle -->
+                    <button class="mobile-toggle" type="button" data-bs-toggle="collapse" data-bs-target="#mobileMenu" aria-expanded="false">
+                        <i class="fas fa-bars"></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Mobile Menu -->
+            <div class="collapse mobile-menu" id="mobileMenu">
+                <ul>
+                    <li><a asp-controller="Home" asp-action="Index"><i class="fas fa-home me-2"></i>Trang chủ</a></li>
+                    <li><a asp-controller="Menu" asp-action="Index"><i class="fas fa-utensils me-2"></i>Thực đơn</a></li>
+                    <li><a href="/Booking"><i class="fas fa-calendar-check me-2"></i>Đặt bàn</a></li>
+                    <li><a asp-controller="Home" asp-action="About"><i class="fas fa-info-circle me-2"></i>Giới thiệu</a></li>
+                    <li><a asp-controller="Home" asp-action="Contact"><i class="fas fa-phone me-2"></i>Liên hệ</a></li>
+                    <li class="mt-2 pt-2" style="border-top: 1px solid var(--border-light);">
+                        @if (Context.Session.GetInt32("CustomerId") != null)
+                        {
+                            <a asp-controller="Account" asp-action="Profile"><i class="fas fa-user-circle me-2"></i>@Context.Session.GetString("CustomerName")</a>
+                        }
+                        else
+                        {
+                            <a asp-controller="Account" asp-action="Login"><i class="fas fa-sign-in-alt me-2"></i>Đăng nhập</a>
+                        }
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </header>
+
+    <main role="main">
+        @if (TempData["SuccessMessage"] != null)
+        {
+            <div class="container mt-4">
+                <div class="alert alert-success alert-dismissible fade show animate-fadeInUp" role="alert">
+                    <i class="fas fa-check-circle me-2"></i>@TempData["SuccessMessage"]
+                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                </div>
+            </div>
+        }
+        @if (TempData["ErrorMessage"] != null)
+        {
+            <div class="container mt-4">
+                <div class="alert alert-danger alert-dismissible fade show animate-fadeInUp" role="alert">
+                    <i class="fas fa-exclamation-circle me-2"></i>@TempData["ErrorMessage"]
+                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                </div>
+            </div>
+        }
+        @RenderBody()
+    </main>
+
+    <!-- Footer -->
+    <footer class="site-footer">
+        <div class="container">
+            <div class="footer-grid-layout">
+                <!-- Column 1: About -->
+                <div class="footer-col">
+                    <h5><i class="fas fa-utensils me-2"></i>Nhà hàng Việt</h5>
+                    <p style="color: rgba(255,255,255,0.8); font-size: var(--text-sm); line-height: 1.8;">
+                        Nhà hàng Việt tự hào mang đến những món ăn truyền thống Việt Nam với hương vị đậm đà, nguyên liệu tươi ngon được chọn lọc kỹ càng mỗi ngày.
+                    </p>
+                    <div class="d-flex align-items-center gap-2 mt-4 p-3" style="background: rgba(255,255,255,0.1); border-radius: var(--radius-lg);">
+                        <div style="width: 50px; height: 50px; background: var(--accent); border-radius: var(--radius-full); display: flex; align-items: center; justify-content: center;">
+                            <i class="fas fa-phone-volume" style="color: var(--secondary); font-size: 1.25rem; animation: ring 1.5s ease-in-out infinite;"></i>
+                        </div>
+                        <div>
+                            <small style="color: rgba(255,255,255,0.7);">Đặt bàn ngay</small>
+                            <div style="font-size: var(--text-xl); font-weight: var(--font-bold); color: var(--accent);">1800 2028</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Column 2: Locations -->
+                <div class="footer-col">
+                    <h5><i class="fas fa-map-marked-alt me-2"></i>Hệ thống cửa hàng</h5>
+                    <ul class="location-list">
+                        <li>
+                            <i class="fas fa-map-marker-alt me-2" style="color: var(--accent);"></i>
+                            <strong>CS1:</strong> 123 Đường ABC, Q.1, TP.HCM
+                        </li>
+                        <li>
+                            <i class="fas fa-map-marker-alt me-2" style="color: var(--accent);"></i>
+                            <strong>CS2:</strong> 456 Đường XYZ, Q.3, TP.HCM
+                        </li>
+                        <li>
+                            <i class="fas fa-map-marker-alt me-2" style="color: var(--accent);"></i>
+                            <strong>CS3:</strong> 789 Đường DEF, Q.7, TP.HCM
+                        </li>
+                    </ul>
+                    <ul class="info-list mt-3">
+                        <li><i class="fas fa-envelope"></i>nhahangviet@gmail.com</li>
+                        <li><i class="fas fa-clock"></i>Mở cửa: 10:30 - 22:00</li>
+                    </ul>
+                </div>
+
+                <!-- Column 3: Quick Links -->
+                <div class="footer-col">
+                    <h5><i class="fas fa-link me-2"></i>Liên kết nhanh</h5>
+                    <ul class="quick-links">
+                        <li><a asp-controller="Home" asp-action="Index">Trang chủ</a></li>
+                        <li><a asp-controller="Menu" asp-action="Index">Thực đơn</a></li>
+                        <li><a asp-controller="Booking" asp-action="Index">Đặt bàn online</a></li>
+                        <li><a asp-controller="Home" asp-action="About">Giới thiệu</a></li>
+                        <li><a asp-controller="Home" asp-action="Contact">Liên hệ</a></li>
+                        <li><a href="#">Chính sách bảo mật</a></li>
+                        <li><a href="#">Điều khoản sử dụng</a></li>
+                    </ul>
+                </div>
+
+                <!-- Column 4: Gallery & Social -->
+                <div class="footer-col">
+                    <h5><i class="fas fa-images me-2"></i>Hình ảnh món ngon</h5>
+                    <div class="footer-gallery">
+                        <a href="#"><img src="/images/dishes/ca-keo-muoi-ot.png" alt="Món 1"></a>
+                        <a href="#"><img src="/images/dishes/banh-trang-cuon.png" alt="Món 2"></a>
+                        <a href="#"><img src="/images/dishes/lau-ca-keo.png" alt="Món 3"></a>
+                        <a href="#"><img src="/images/dishes/vit-nuong-chao.png" alt="Món 4"></a>
+                        <a href="#"><img src="/images/dishes/lau-ga-la-giang.png" alt="Món 5"></a>
+                        <a href="#"><img src="/images/dishes/banh-xeo.png" alt="Món 6"></a>
+                    </div>
+                    <div class="social-icons">
+                        <a href="#" title="Facebook"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#" title="Instagram"><i class="fab fa-instagram"></i></a>
+                        <a href="#" title="Youtube"><i class="fab fa-youtube"></i></a>
+                        <a href="#" title="Tiktok"><i class="fab fa-tiktok"></i></a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Footer Bottom -->
+            <div class="footer-bottom">
+                <div class="row align-items-center">
+                    <div class="col-md-6 text-center text-md-start">
+                        <p class="mb-0">&copy; 2024 <strong>Nhà hàng Việt</strong>. All rights reserved.</p>
+                    </div>
+                    <div class="col-md-6 text-center text-md-end mt-2 mt-md-0">
+                        <div class="d-flex justify-content-center justify-content-md-end gap-3 align-items-center">
+                            <img src="https://upload.wikimedia.org/wikipedia/vi/f/fe/MoMo_Logo.png" alt="MoMo" style="height: 24px; filter: brightness(0) invert(0.6);">
+                            <img src="https://sandbox.vnpayment.vn/paymentv2/images/icons/vi.png" alt="VNPay" style="height: 20px; filter: brightness(0) invert(0.6);">
+                            <span style="color: rgba(255,255,255,0.6);"><i class="fas fa-credit-card me-1"></i>COD</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Mobile Bottom Navigation -->
+    <nav class="bottom-nav d-md-none">
+        <a asp-controller="Home" asp-action="Index" class="bottom-nav-item">
+            <i class="fas fa-home"></i>
+            <span>Trang chủ</span>
+        </a>
+        <a asp-controller="Menu" asp-action="Index" class="bottom-nav-item">
+            <i class="fas fa-utensils"></i>
+            <span>Thực đơn</span>
+        </a>
+        <a asp-controller="Cart" asp-action="Index" class="bottom-nav-item" style="position: relative;">
+            <i class="fas fa-shopping-cart"></i>
+            <span>Giỏ hàng</span>
+            <span class="bottom-nav-badge" id="cartCountMobile" style="display: none;">0</span>
+        </a>
+        <a asp-controller="Booking" asp-action="Index" class="bottom-nav-item">
+            <i class="fas fa-calendar-check"></i>
+            <span>Đặt bàn</span>
+        </a>
+        <a asp-controller="Account" asp-action="Profile" class="bottom-nav-item">
+            <i class="fas fa-user"></i>
+            <span>Tài khoản</span>
+        </a>
+    </nav>
+
+    <!-- Scroll to Top Button -->
+    <button class="scroll-to-top" id="scrollToTop" aria-label="Scroll to top">
+        <i class="fas fa-arrow-up"></i>
+    </button>
+
+    <!-- Toast Container -->
+    <div id="toastContainer" class="position-fixed bottom-0 end-0 p-3" style="z-index: var(--z-toast);"></div>
+
+    <!-- Scripts -->
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="~/css/user-animations.css" asp-append-version="true" />
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    
+    <script>
+        $(document).ready(function() {
+            // Load cart count
+            $.get('@Url.Action("GetCartCount", "Cart")', function(data) {
+                var count = data.count || 0;
+                $('#cartCount').text(count);
+                if (count > 0) {
+                    $('#cartCountMobile').text(count).show();
+                }
+            });
+
+            // Initialize Bootstrap dropdowns
+            if (typeof bootstrap !== 'undefined') {
+                var dropdownElementList = [].slice.call(document.querySelectorAll('.dropdown-toggle'));
+                dropdownElementList.map(function (dropdownToggleEl) {
+                    return new bootstrap.Dropdown(dropdownToggleEl);
+                });
+            }
+
+            // Highlight current page in nav
+            var currentPath = window.location.pathname.toLowerCase();
+            $('.nav-menu li a, .mobile-menu li a, .bottom-nav-item').each(function() {
+                var linkPath = $(this).attr('href');
+                if (linkPath && currentPath === linkPath.toLowerCase()) {
+                    $(this).addClass('active');
+                }
+            });
+
+            // Header scroll effect
+            var header = $('.main-header');
+            $(window).scroll(function() {
+                if ($(this).scrollTop() > 50) {
+                    header.css('box-shadow', 'var(--shadow-lg)');
+                } else {
+                    header.css('box-shadow', 'var(--shadow-md)');
+                }
+            });
+        });
+
+        // Global toast function
+        function showToast(message, type) {
+            var bgClass = type === 'success' ? 'bg-success' : type === 'error' ? 'bg-danger' : 'bg-info';
+            var icon = type === 'success' ? 'fa-check-circle' : type === 'error' ? 'fa-exclamation-circle' : 'fa-info-circle';
+            
+            var toast = $(`
+                <div class="toast show align-items-center text-white ${bgClass} border-0 mb-2" role="alert" style="min-width: 280px;">
+                    <div class="d-flex">
+                        <div class="toast-body">
+                            <i class="fas ${icon} me-2"></i>${message}
+                        </div>
+                        <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast"></button>
+                    </div>
+                </div>
+            `);
+            
+            $('#toastContainer').append(toast);
+            
+            setTimeout(function() {
+                toast.fadeOut(300, function() {
+                    $(this).remove();
+                });
+            }, 3500);
+        }
+
+        // Update cart count globally
+        function updateCartCount(count) {
+            $('#cartCount').text(count);
+            if (count > 0) {
+                $('#cartCountMobile').text(count).show();
+            } else {
+                $('#cartCountMobile').hide();
+            }
+        }
+
+        // Scroll to top button functionality
+        $(window).scroll(function() {
+            if ($(this).scrollTop() > 300) {
+                $('#scrollToTop').addClass('visible');
+            } else {
+                $('#scrollToTop').removeClass('visible');
+            }
+        });
+
+        $('#scrollToTop').click(function() {
+            $('html, body').animate({ scrollTop: 0 }, 600);
+            return false;
+        });
+    </script>
+    
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

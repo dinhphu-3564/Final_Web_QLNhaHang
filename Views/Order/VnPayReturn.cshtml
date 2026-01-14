@@ -1,0 +1,166 @@
+@{
+    ViewData["Title"] = "Kết quả thanh toán";
+    var success = ViewBag.Success as bool? ?? false;
+    var message = ViewBag.Message as string;
+    var order = ViewBag.Order as Web_QLNhaHang.Models.Order;
+}
+
+<style>
+    .result-container {
+        max-width: 600px;
+        margin: 0 auto;
+    }
+    .result-card {
+        border: none;
+        border-radius: 20px;
+        box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+        overflow: hidden;
+    }
+    .result-header {
+        padding: 3rem 2rem;
+        text-align: center;
+    }
+    .result-header.success {
+        background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+        color: white;
+    }
+    .result-header.failed {
+        background: linear-gradient(135deg, #dc3545 0%, #c82333 100%);
+        color: white;
+    }
+    .result-icon {
+        width: 100px;
+        height: 100px;
+        border-radius: 50%;
+        background: rgba(255,255,255,0.2);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0 auto 1.5rem;
+        font-size: 3rem;
+    }
+    .result-body {
+        padding: 2rem;
+    }
+    .order-info-row {
+        display: flex;
+        justify-content: space-between;
+        padding: 0.75rem 0;
+        border-bottom: 1px solid #e9ecef;
+    }
+    .order-info-row:last-child {
+        border-bottom: none;
+    }
+    .vnpay-badge {
+        background: linear-gradient(135deg, #0066cc 0%, #004999 100%);
+        color: white;
+        padding: 0.25rem 0.75rem;
+        border-radius: 20px;
+        font-size: 0.8rem;
+    }
+</style>
+
+<!-- Page Banner -->
+<div class="page-banner">
+    <div class="container">
+        <h1>Kết quả thanh toán</h1>
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a asp-controller="Home" asp-action="Index">Trang chủ</a></li>
+                <li class="breadcrumb-item active" aria-current="page">Kết quả thanh toán</li>
+            </ol>
+        </nav>
+    </div>
+</div>
+
+<div class="container mb-5">
+    <div class="result-container">
+        <div class="result-card">
+            @if (success)
+            {
+                <div class="result-header success">
+                    <div class="result-icon">
+                        <i class="fas fa-check"></i>
+                    </div>
+                    <h2 class="mb-2">Thanh toán thành công!</h2>
+                    <p class="mb-0 opacity-75">Đơn hàng của bạn đã được xử lý</p>
+                </div>
+            }
+            else
+            {
+                <div class="result-header failed">
+                    <div class="result-icon">
+                        <i class="fas fa-times"></i>
+                    </div>
+                    <h2 class="mb-2">Thanh toán thất bại</h2>
+                    <p class="mb-0 opacity-75">@message</p>
+                </div>
+            }
+
+            <div class="result-body">
+                @if (order != null)
+                {
+                    <h5 class="mb-3"><i class="fas fa-receipt me-2 text-success"></i>Thông tin đơn hàng</h5>
+                    
+                    <div class="order-info-row">
+                        <span class="text-muted">Mã đơn hàng</span>
+                        <strong>@order.OrderNumber</strong>
+                    </div>
+                    
+                    <div class="order-info-row">
+                        <span class="text-muted">Tổng tiền</span>
+                        <strong class="text-success fs-5">@order.TotalAmount.ToString("N0") ₫</strong>
+                    </div>
+                    
+                    <div class="order-info-row">
+                        <span class="text-muted">Phương thức thanh toán</span>
+                        <span class="vnpay-badge"><i class="fas fa-university me-1"></i>VNPay</span>
+                    </div>
+                    
+                    @if (!string.IsNullOrEmpty(order.VnpTransactionNo))
+                    {
+                        <div class="order-info-row">
+                            <span class="text-muted">Mã giao dịch VNPay</span>
+                            <strong>@order.VnpTransactionNo</strong>
+                        </div>
+                    }
+                    
+                    <div class="order-info-row">
+                        <span class="text-muted">Trạng thái thanh toán</span>
+                        @if (order.PaymentStatus == "Đã thanh toán")
+                        {
+                            <span class="badge bg-success"><i class="fas fa-check-circle me-1"></i>Đã thanh toán</span>
+                        }
+                        else
+                        {
+                            <span class="badge bg-warning"><i class="fas fa-clock me-1"></i>Chưa thanh toán</span>
+                        }
+                    </div>
+
+                    <div class="order-info-row">
+                        <span class="text-muted">Khách hàng</span>
+                        <span>@order.CustomerName</span>
+                    </div>
+                }
+
+                <div class="d-flex gap-3 mt-4">
+                    @if (success && order != null)
+                    {
+                        <a asp-action="OrderSuccess" asp-route-orderNumber="@order.OrderNumber" class="btn btn-success flex-fill">
+                            <i class="fas fa-eye me-2"></i>Xem chi tiết đơn hàng
+                        </a>
+                    }
+                    else
+                    {
+                        <a asp-controller="Cart" asp-action="Index" class="btn btn-primary flex-fill">
+                            <i class="fas fa-shopping-cart me-2"></i>Quay lại giỏ hàng
+                        </a>
+                    }
+                    <a asp-controller="Home" asp-action="Index" class="btn btn-outline-secondary flex-fill">
+                        <i class="fas fa-home me-2"></i>Trang chủ
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

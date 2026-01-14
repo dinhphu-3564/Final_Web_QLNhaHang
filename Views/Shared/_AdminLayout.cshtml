@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - Admin - Nhà Hàng Việt</title>
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <!-- Bootstrap 5 -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    
+    <!-- Font Awesome 6 -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+    
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="~/css/admin-variables.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/admin-base.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/admin-layout.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/admin-components.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/admin-pages.css" asp-append-version="true" />
+    
+    @await RenderSectionAsync("Styles", required: false)
+</head>
+<body>
+    <!-- Sidebar -->
+    <div class="admin-sidebar" id="adminSidebar">
+        <div class="sidebar-brand">
+            <i class="fas fa-utensils"></i>
+            <h4>Admin Panel</h4>
+        </div>
+        <ul class="sidebar-menu">
+            <li>
+                <a href="/Admin/Dashboard" class="@(ViewContext.RouteData.Values["Controller"]?.ToString() == "Dashboard" ? "active" : "")">
+                    <i class="fas fa-tachometer-alt"></i>
+                    <span>Dashboard</span>
+                </a>
+            </li>
+            <li>
+                <a href="/Admin/Statistics" class="@(ViewContext.RouteData.Values["Controller"]?.ToString() == "Statistics" ? "active" : "")">
+                    <i class="fas fa-chart-line"></i>
+                    <span>Thống kê</span>
+                </a>
+            </li>
+            <li>
+                <a href="#" class="menu-dropdown-toggle" onclick="toggleSubmenu(event, 'menuSubmenu')">
+                    <i class="fas fa-utensils"></i>
+                    <span>Quản lý món ăn</span>
+                </a>
+                <ul class="sidebar-submenu @(ViewContext.RouteData.Values["Controller"]?.ToString() == "Dish" || ViewContext.RouteData.Values["Controller"]?.ToString() == "Category" ? "show" : "")" id="menuSubmenu">
+                    <li><a href="/Admin/Dish/Index" class="@(ViewContext.RouteData.Values["Controller"]?.ToString() == "Dish" && ViewContext.RouteData.Values["Action"]?.ToString() == "Index" ? "active" : "")">Danh sách món</a></li>
+                    <li><a href="/Admin/Dish/Create" class="@(ViewContext.RouteData.Values["Controller"]?.ToString() == "Dish" && ViewContext.RouteData.Values["Action"]?.ToString() == "Create" ? "active" : "")">Thêm món mới</a></li>
+                    <li><a href="/Admin/Category/Index" class="@(ViewContext.RouteData.Values["Controller"]?.ToString() == "Category" ? "active" : "")">Danh mục</a></li>
+                </ul>
+            </li>
+            <li>
+                <a href="/Admin/Table/Index" class="@(ViewContext.RouteData.Values["Controller"]?.ToString() == "Table" ? "active" : "")">
+                    <i class="fas fa-chair"></i>
+                    <span>Quản lý bàn</span>
+                </a>
+            </li>
+            <li>
+                <a href="/Admin/Booking/Index" class="@(ViewContext.RouteData.Values["Controller"]?.ToString() == "AdminBooking" || ViewContext.RouteData.Values["Controller"]?.ToString() == "Booking" ? "active" : "")">
+                    <i class="fas fa-calendar-check"></i>
+                    <span>Đặt bàn</span>
+                </a>
+            </li>
+            <li>
+                <a href="/Admin/Order/Index" class="@(ViewContext.RouteData.Values["Controller"]?.ToString() == "Order" ? "active" : "")">
+                    <i class="fas fa-shopping-cart"></i>
+                    <span>Đơn hàng</span>
+                </a>
+            </li>
+            <li>
+                <a href="/Admin/Customer/Index" class="@(ViewContext.RouteData.Values["Controller"]?.ToString() == "Customer" ? "active" : "")">
+                    <i class="fas fa-users"></i>
+                    <span>Khách hàng</span>
+                </a>
+            </li>
+            <li>
+                <a href="/Admin/Employee/Index" class="@(ViewContext.RouteData.Values["Controller"]?.ToString() == "Employee" ? "active" : "")">
+                    <i class="fas fa-user-tie"></i>
+                    <span>Nhân viên</span>
+                </a>
+            </li>
+        </ul>
+    </div>
+
+    <!-- Main Content -->
+    <div class="admin-content">
+        <!-- Top Header -->
+        <div class="admin-header">
+            <div class="admin-header-left">
+                <button class="sidebar-collapse-btn" onclick="toggleSidebar()">
+                    <i class="fas fa-bars"></i>
+                </button>
+                <h5>
+                    <i class="fas fa-home"></i>
+                    @ViewData["Title"]
+                </h5>
+            </div>
+            
+            <div class="admin-header-right">
+                <div class="admin-search d-none d-lg-flex">
+                    <i class="fas fa-search"></i>
+                    <input type="text" placeholder="Tìm kiếm..." />
+                </div>
+                
+                <div class="header-notification">
+                    <i class="fas fa-bell"></i>
+                    <span class="notification-badge">3</span>
+                </div>
+                
+                <div class="admin-user" onclick="toggleUserDropdown()">
+                    <div class="admin-user-avatar">
+                        @{
+                            var fullName = Context.Session.GetString("FullName") ?? "Admin";
+                            var initials = string.Join("", fullName.Split(' ').Take(2).Select(s => s.FirstOrDefault()));
+                        }
+                        @initials
+                    </div>
+                    <div class="admin-user-info">
+                        <div class="admin-user-name">@fullName</div>
+                        <div class="admin-user-role">Quản trị viên</div>
+                    </div>
+                </div>
+                
+                <!-- User Dropdown (Hidden by default) -->
+                <div class="dropdown" style="display: none;" id="userDropdown">
+                    <a href="/Admin/AdminAuth/Logout" class="btn btn-danger btn-sm">
+                        <i class="fas fa-sign-out-alt"></i> Đăng xuất
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Body -->
+        <div class="admin-body">
+            @if (TempData["SuccessMessage"] != null)
+            {
+                <div class="alert alert-success">
+                    <i class="fas fa-check-circle alert-icon"></i>
+                    <div class="alert-content">
+                        <div class="alert-title">Thành công!</div>
+                        @TempData["SuccessMessage"]
+                    </div>
+                </div>
+            }
+            @if (TempData["ErrorMessage"] != null)
+            {
+                <div class="alert alert-danger">
+                    <i class="fas fa-exclamation-circle alert-icon"></i>
+                    <div class="alert-content">
+                        <div class="alert-title">Lỗi!</div>
+                        @TempData["ErrorMessage"]
+                    </div>
+                </div>
+            }
+            
+            @RenderBody()
+        </div>
+
+        <!-- Footer -->
+        <footer class="admin-footer">
+            <p>&copy; 2024 <strong>Nhà hàng Việt</strong>. All rights reserved.</p>
+        </footer>
+    </div>
+
+    <!-- Mobile Toggle -->
+    <button class="sidebar-toggle-mobile" onclick="toggleSidebar()">
+        <i class="fas fa-bars"></i>
+    </button>
+
+    <!-- jQuery -->
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    
+    <!-- Bootstrap 5 -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+    
+    <!-- Custom Admin JS -->
+    <script src="~/js/admin.js" asp-append-version="true"></script>
+    
+    <script>
+        function toggleSidebar() {
+            const sidebar = document.getElementById('adminSidebar');
+            sidebar.classList.toggle('show');
+            sidebar.classList.toggle('collapsed');
+        }
+
+        function toggleSubmenu(event, id) {
+            event.preventDefault();
+            const submenu = document.getElementById(id);
+            const toggle = event.currentTarget;
+            submenu.classList.toggle('show');
+            toggle.classList.toggle('active');
+        }
+
+        function toggleUserDropdown() {
+            const dropdown = document.getElementById('userDropdown');
+            if (dropdown.style.display === 'none') {
+                dropdown.style.display = 'block';
+            } else {
+                dropdown.style.display = 'none';
+            }
+        }
+
+        // Auto-highlight active menu
+        document.addEventListener('DOMContentLoaded', function() {
+            const path = window.location.pathname;
+            const links = document.querySelectorAll('.sidebar-menu a');
+            
+            links.forEach(link => {
+                const href = link.getAttribute('href');
+                if (href && path.includes(href) && href !== '#') {
+                    link.classList.add('active');
+                    
+                    // Open parent submenu if exists
+                    const submenu = link.closest('.sidebar-submenu');
+                    if (submenu) {
+                        submenu.classList.add('show');
+                        const toggle = submenu.previousElementSibling;
+                        if (toggle) {
+                            toggle.classList.add('active');
+                        }
+                    }
+                }
+            });
+
+            // Auto-dismiss alerts after 5 seconds
+            setTimeout(function() {
+                const alerts = document.querySelectorAll('.alert');
+                alerts.forEach(alert => {
+                    alert.style.transition = 'opacity 0.3s';
+                    alert.style.opacity = '0';
+                    setTimeout(() => alert.remove(), 300);
+                });
+            }, 5000);
+        });
+
+        // Close user dropdown when clicking outside
+        document.addEventListener('click', function(event) {
+            const userDropdown = document.getElementById('userDropdown');
+            const adminUser = document.querySelector('.admin-user');
+            
+            if (!adminUser.contains(event.target) && !userDropdown.contains(event.target)) {
+                userDropdown.style.display = 'none';
+            }
+        });
+    </script>
+    
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

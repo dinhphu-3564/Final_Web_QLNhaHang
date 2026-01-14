@@ -1,0 +1,337 @@
+@{
+    ViewData["Title"] = "Dashboard";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+    var stats = ViewBag.Stats;
+}
+
+<!-- Dashboard Stats -->
+<div class="dashboard-stats">
+    <!-- Stat Card 1: Doanh thu tháng này -->
+    <div class="stat-card">
+        <div class="stat-icon primary">
+            <i class="fas fa-dollar-sign"></i>
+        </div>
+        <div class="stat-content">
+            <div class="stat-label">Doanh thu tháng này</div>
+            <div class="stat-value">@(stats?.MonthlyRevenue != null ? ((decimal)stats.MonthlyRevenue).ToString("N0") : "0")₫</div>
+            <div class="stat-trend up">
+                <i class="fas fa-arrow-up"></i>
+                <span>Tháng này</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Stat Card 2: Tổng đơn hàng -->
+    <div class="stat-card">
+        <div class="stat-icon info">
+            <i class="fas fa-receipt"></i>
+        </div>
+        <div class="stat-content">
+            <div class="stat-label">Tổng đơn hàng</div>
+            <div class="stat-value">@(stats?.TotalOrders ?? 0)</div>
+            <div class="stat-trend">
+                <i class="fas fa-calendar-day me-1"></i>
+                <span>Hôm nay: @(stats?.TodayOrders ?? 0)</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Stat Card 3: Đơn chờ xử lý -->
+    <div class="stat-card">
+        <div class="stat-icon warning">
+            <i class="fas fa-clock"></i>
+        </div>
+        <div class="stat-content">
+            <div class="stat-label">Đơn chờ xử lý</div>
+            <div class="stat-value">@(stats?.PendingOrders ?? 0)</div>
+            <div class="stat-trend">
+                <span class="text-secondary">Cần xác nhận</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Stat Card 4: Khách hàng -->
+    <div class="stat-card">
+        <div class="stat-icon purple">
+            <i class="fas fa-users"></i>
+        </div>
+        <div class="stat-content">
+            <div class="stat-label">Tổng khách hàng</div>
+            <div class="stat-value">@(stats?.TotalCustomers ?? 0)</div>
+            <div class="stat-trend">
+                <i class="fas fa-calendar-check me-1"></i>
+                <span>Đặt bàn chờ: @(stats?.PendingBookings ?? 0)</span>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Charts -->
+<div class="dashboard-charts">
+    <!-- Revenue Chart -->
+    <div class="chart-container">
+        <div class="chart-header">
+            <h3 class="chart-title">Doanh thu 7 ngày gần đây</h3>
+            <div class="chart-filters">
+                <button class="btn btn-sm btn-outline-secondary active">7 ngày</button>
+                <button class="btn btn-sm btn-outline-secondary">30 ngày</button>
+            </div>
+        </div>
+        <canvas id="revenueChart" height="80"></canvas>
+    </div>
+
+    <!-- Orders Chart -->
+    <div class="chart-container">
+        <div class="chart-header">
+            <h3 class="chart-title">Tổng quan đơn hàng</h3>
+        </div>
+        <canvas id="ordersChart" height="80"></canvas>
+    </div>
+</div>
+
+<!-- Recent Data -->
+<div class="row g-4">
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header" style="background: linear-gradient(135deg, #FF6B35 0%, #E5522A 100%); color: white;">
+                <h5 class="card-title mb-0">
+                    <i class="fas fa-shopping-bag me-2"></i>
+                    Đơn hàng gần đây
+                </h5>
+            </div>
+            <div class="card-body p-0">
+                <div class="table-responsive">
+                    <table class="table mb-0">
+                        <thead>
+                            <tr>
+                                <th>Mã đơn</th>
+                                <th>Khách hàng</th>
+                                <th>Tổng tiền</th>
+                                <th>Trạng thái</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @if (ViewBag.RecentOrders != null)
+                            {
+                                @foreach (var order in (List<Web_QLNhaHang.Models.Order>)ViewBag.RecentOrders)
+                                {
+                                    <tr>
+                                        <td><strong>@order.OrderNumber</strong></td>
+                                        <td>@order.CustomerName</td>
+                                        <td class="font-semibold text-primary">@order.TotalAmount.ToString("N0")₫</td>
+                                        <td>
+                                            @if (order.Status == "Completed")
+                                            {
+                                                <span class="badge badge-success">Hoàn thành</span>
+                                            }
+                                            else if (order.Status == "Pending")
+                                            {
+                                                <span class="badge badge-warning">Chờ xác nhận</span>
+                                            }
+                                            else if (order.Status == "Processing")
+                                            {
+                                                <span class="badge badge-info">Đang xử lý</span>
+                                            }
+                                            else
+                                            {
+                                                <span class="badge badge-secondary">@order.Status</span>
+                                            }
+                                        </td>
+                                    </tr>
+                                }
+                            }
+                            else
+                            {
+                                <tr>
+                                    <td colspan="4" class="text-center text-secondary">Chưa có đơn hàng nào</td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="card-footer">
+                <a asp-controller="Order" asp-action="Index" class="btn btn-primary btn-sm">
+                    <i class="fas fa-list me-1"></i> Xem tất cả
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header" style="background: linear-gradient(135deg, #3B82F6 0%, #2563EB 100%); color: white;">
+                <h5 class="card-title mb-0">
+                    <i class="fas fa-calendar-check me-2"></i>
+                    Đặt bàn gần đây
+                </h5>
+            </div>
+            <div class="card-body p-0">
+                <div class="table-responsive">
+                    <table class="table mb-0">
+                        <thead>
+                            <tr>
+                                <th>Khách hàng</th>
+                                <th>Ngày giờ</th>
+                                <th>Số khách</th>
+                                <th>Trạng thái</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @if (ViewBag.RecentBookings != null)
+                            {
+                                @foreach (var booking in (List<Web_QLNhaHang.Models.Booking>)ViewBag.RecentBookings)
+                                {
+                                    <tr>
+                                        <td><strong>@booking.CustomerName</strong></td>
+                                        <td>@booking.BookingDate.ToString("dd/MM/yyyy HH:mm")</td>
+                                        <td>@booking.NumberOfGuests người</td>
+                                        <td>
+                                            @if (booking.Status == "Confirmed")
+                                            {
+                                                <span class="badge badge-success">Đã xác nhận</span>
+                                            }
+                                            else if (booking.Status == "Pending")
+                                            {
+                                                <span class="badge badge-warning">Chờ xác nhận</span>
+                                            }
+                                            else if (booking.Status == "Cancelled")
+                                            {
+                                                <span class="badge badge-danger">Đã hủy</span>
+                                            }
+                                            else
+                                            {
+                                                <span class="badge badge-secondary">@booking.Status</span>
+                                            }
+                                        </td>
+                                    </tr>
+                                }
+                            }
+                            else
+                            {
+                                <tr>
+                                    <td colspan="4" class="text-center text-secondary">Chưa có đặt bàn nào</td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="card-footer">
+                <a asp-controller="Booking" asp-action="Index" class="btn btn-primary btn-sm">
+                    <i class="fas fa-list me-1"></i> Xem tất cả
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        // Revenue Chart
+        const revenueCtx = document.getElementById('revenueChart').getContext('2d');
+        new Chart(revenueCtx, {
+            type: 'line',
+            data: {
+                labels: ['CN', 'T2', 'T3', 'T4', 'T5', 'T6', 'T7'],
+                datasets: [{
+                    label: 'Doanh thu (VNĐ)',
+                    data: [2500000, 3200000, 2800000, 4100000, 3600000, 4500000, 3900000],
+                    borderColor: '#FF6B35',
+                    backgroundColor: 'rgba(255, 107, 53, 0.1)',
+                    borderWidth: 3,
+                    fill: true,
+                    tension: 0.4,
+                    pointRadius: 5,
+                    pointHoverRadius: 7,
+                    pointBackgroundColor: '#FF6B35',
+                    pointBorderColor: '#fff',
+                    pointBorderWidth: 2
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: true,
+                plugins: {
+                    legend: {
+                        display: false
+                    },
+                    tooltip: {
+                        callbacks: {
+                            label: function(context) {
+                                return 'Doanh thu: ' + context.parsed.y.toLocaleString('vi-VN') + '₫';
+                            }
+                        }
+                    }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        ticks: {
+                            callback: function(value) {
+                                return (value / 1000000).toFixed(1) + 'M';
+                            }
+                        },
+                        grid: {
+                            color: 'rgba(0, 0, 0, 0.05)'
+                        }
+                    },
+                    x: {
+                        grid: {
+                            display: false
+                        }
+                    }
+                }
+            }
+        });
+
+        // Orders Chart
+        const ordersCtx = document.getElementById('ordersChart').getContext('2d');
+        new Chart(ordersCtx, {
+            type: 'bar',
+            data: {
+                labels: ['Hoàn thành', 'Đang xử lý', 'Chờ xác nhận', 'Đã hủy'],
+                datasets: [{
+                    label: 'Số đơn',
+                    data: [45, 12, 8, 3],
+                    backgroundColor: [
+                        'rgba(16, 185, 129, 0.8)',
+                        'rgba(59, 130, 246, 0.8)',
+                        'rgba(245, 158, 11, 0.8)',
+                        'rgba(239, 68, 68, 0.8)'
+                    ],
+                    borderColor: [
+                        '#10B981',
+                        '#3B82F6',
+                        '#F59E0B',
+                        '#EF4444'
+                    ],
+                    borderWidth: 2,
+                    borderRadius: 8
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: true,
+                plugins: {
+                    legend: {
+                        display: false
+                    }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        grid: {
+                            color: 'rgba(0, 0, 0, 0.05)'
+                        }
+                    },
+                    x: {
+                        grid: {
+                            display: false
+                        }
+                    }
+                }
+            }
+        });
+    </script>
+}

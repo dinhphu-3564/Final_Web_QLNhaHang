@@ -1,0 +1,66 @@
+@model List<Web_QLNhaHang.Models.Booking>
+@{
+    ViewData["Title"] = "Kiểm tra trạng thái đặt bàn";
+}
+
+<div class="container mt-4">
+    <h1 class="mb-4">Kiểm tra trạng thái đặt bàn</h1>
+
+    <div class="card mb-4">
+        <div class="card-body">
+            <form asp-action="CheckStatus" method="get" class="row">
+                <div class="col-md-8">
+                    <input type="text" name="phone" class="form-control" placeholder="Nhập số điện thoại đã đặt bàn" required>
+                </div>
+                <div class="col-md-4">
+                    <button type="submit" class="btn btn-primary w-100">Kiểm tra</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    @if (Model != null && Model.Any())
+    {
+        <div class="card">
+            <div class="card-header">
+                <h5>Lịch sử đặt bàn</h5>
+            </div>
+            <div class="card-body">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Mã đặt bàn</th>
+                            <th>Ngày giờ</th>
+                            <th>Số khách</th>
+                            <th>Bàn</th>
+                            <th>Trạng thái</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var booking in Model)
+                        {
+                            <tr>
+                                <td>#@booking.BookingId</td>
+                                <td>@booking.BookingDate.ToString("dd/MM/yyyy HH:mm")</td>
+                                <td>@booking.NumberOfGuests</td>
+                                <td>@(booking.Table?.TableNumber ?? "Chưa chọn")</td>
+                                <td>
+                                    <span class="badge @(booking.Status == "Xác nhận" ? "bg-success" : booking.Status == "Hoàn tất" ? "bg-info" : booking.Status == "Hủy" ? "bg-danger" : "bg-warning")">
+                                        @booking.Status
+                                    </span>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    }
+    else if (ViewContext.HttpContext.Request.Query.ContainsKey("phone"))
+    {
+        <div class="alert alert-info">
+            Không tìm thấy đặt bàn nào với số điện thoại này.
+        </div>
+    }
+</div>
+

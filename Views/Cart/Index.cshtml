@@ -1,0 +1,710 @@
+@model List<Web_QLNhaHang.Models.CartItem>
+@{
+    ViewData["Title"] = "Giỏ hàng";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    decimal total = Model.Sum(c => c.SubTotal);
+}
+
+<!-- Page Banner -->
+<div class="page-banner" style="padding: var(--space-8) 0;">
+    <div class="container">
+        <h1><i class="fas fa-shopping-cart me-3"></i>Giỏ hàng</h1>
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb mb-0">
+                <li class="breadcrumb-item"><a asp-controller="Home" asp-action="Index">Trang chủ</a></li>
+                <li class="breadcrumb-item active" aria-current="page">Giỏ hàng</li>
+            </ol>
+        </nav>
+    </div>
+</div>
+
+<section class="cart-section">
+    <div class="container">
+        @if (Model.Count == 0)
+        {
+            <!-- Empty Cart -->
+            <div class="empty-cart-wrapper">
+                <div class="empty-cart">
+                    <div class="empty-icon">
+                        <i class="fas fa-shopping-basket"></i>
+                    </div>
+                    <h3>Giỏ hàng trống</h3>
+                    <p>Bạn chưa có món ăn nào trong giỏ hàng. Hãy khám phá thực đơn ngay!</p>
+                    <a asp-controller="Menu" asp-action="Index" class="btn-primary-custom btn-lg">
+                        <i class="fas fa-utensils me-2"></i>Xem thực đơn
+                    </a>
+                </div>
+            </div>
+        }
+        else
+        {
+            <div class="row">
+                <!-- Cart Items -->
+                <div class="col-lg-8 mb-4">
+                    <div class="cart-card">
+                        <div class="cart-card-header">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <h5><i class="fas fa-list me-2"></i>Chi tiết giỏ hàng</h5>
+                                <span class="item-count">@Model.Count món</span>
+                            </div>
+                        </div>
+                        
+                        <div class="cart-items">
+                            @foreach (var item in Model)
+                            {
+                                <div class="cart-item">
+                                    <div class="item-image">
+                                        @if (!string.IsNullOrEmpty(item.ImageUrl))
+                                        {
+                                            <img src="@item.ImageUrl" alt="@item.DishName">
+                                        }
+                                        else
+                                        {
+                                            <div class="placeholder-img">
+                                                <i class="fas fa-utensils"></i>
+                                            </div>
+                                        }
+                                    </div>
+                                    
+                                    <div class="item-details">
+                                        <h4 class="item-name">@item.DishName</h4>
+                                        <div class="item-price">@item.Price.ToString("N0") ₫</div>
+                                        
+                                        @if (!string.IsNullOrEmpty(item.Notes))
+                                        {
+                                            <div class="item-notes">
+                                                <i class="fas fa-sticky-note me-1"></i>@item.Notes
+                                            </div>
+                                        }
+                                    </div>
+                                    
+                                    <div class="item-quantity">
+                                        <form asp-action="UpdateCart" method="post" class="qty-form">
+                                            <input type="hidden" name="dishId" value="@item.DishId">
+                                            <div class="qty-wrapper">
+                                                <button type="button" class="qty-btn" onclick="changeQty(this, -1)">
+                                                    <i class="fas fa-minus"></i>
+                                                </button>
+                                                <input type="number" name="quantity" value="@item.Quantity" min="1" max="99" class="qty-input" onchange="this.form.submit()">
+                                                <button type="button" class="qty-btn" onclick="changeQty(this, 1)">
+                                                    <i class="fas fa-plus"></i>
+                                                </button>
+                                            </div>
+                                        </form>
+                                    </div>
+                                    
+                                    <div class="item-subtotal">
+                                        @item.SubTotal.ToString("N0") ₫
+                                    </div>
+                                    
+                                    <form asp-action="RemoveFromCart" method="post" class="remove-form">
+                                        <input type="hidden" name="dishId" value="@item.DishId">
+                                        <button type="submit" class="btn-remove" onclick="return confirm('Xóa món này khỏi giỏ hàng?')" title="Xóa">
+                                            <i class="fas fa-trash-alt"></i>
+                                        </button>
+                                    </form>
+                                </div>
+                                
+                                <!-- Notes Form -->
+                                <div class="notes-form-wrapper">
+                                    <form asp-action="UpdateCartNotes" method="post" class="notes-form">
+                                        <input type="hidden" name="dishId" value="@item.DishId">
+                                        <div class="notes-input-group">
+                                            <i class="fas fa-edit"></i>
+                                            <input type="text" name="notes" value="@item.Notes" placeholder="Ghi chú: ít cay, không hành, ...">
+                                            <button type="submit" class="btn-save-notes">
+                                                <i class="fas fa-check"></i>
+                                            </button>
+                                        </div>
+                                    </form>
+                                </div>
+                            }
+                        </div>
+                        
+                        <div class="cart-card-footer">
+                            <a asp-controller="Menu" asp-action="Index" class="btn-continue">
+                                <i class="fas fa-arrow-left me-2"></i>Tiếp tục chọn món
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Order Summary -->
+                <div class="col-lg-4">
+                    <div class="summary-card">
+                        <div class="summary-header">
+                            <h5><i class="fas fa-receipt me-2"></i>Tóm tắt đơn hàng</h5>
+                        </div>
+                        
+                        <div class="summary-body">
+                            <div class="summary-row">
+                                <span>Số lượng món</span>
+                                <strong>@Model.Count món</strong>
+                            </div>
+                            <div class="summary-row">
+                                <span>Tạm tính</span>
+                                <strong>@total.ToString("N0") ₫</strong>
+                            </div>
+                            <div class="summary-row">
+                                <span>Phí giao hàng</span>
+                                <strong class="free-shipping">
+                                    <i class="fas fa-gift me-1"></i>Miễn phí
+                                </strong>
+                            </div>
+                            
+                            <div class="summary-total">
+                                <span>Tổng cộng</span>
+                                <strong>@total.ToString("N0") ₫</strong>
+                            </div>
+                            
+                            <a asp-controller="Order" asp-action="Checkout" class="btn-checkout">
+                                <i class="fas fa-credit-card me-2"></i>
+                                Tiến hành thanh toán
+                            </a>
+                            
+                            <div class="security-info">
+                                <i class="fas fa-shield-alt"></i>
+                                <span>Thanh toán an toàn & bảo mật</span>
+                            </div>
+                        </div>
+                        
+                        <!-- Promo Section -->
+                        <div class="promo-section">
+                            <h6><i class="fas fa-tag me-2"></i>Mã giảm giá</h6>
+                            <div class="promo-input-group">
+                                <input type="text" placeholder="Nhập mã giảm giá">
+                                <button type="button">Áp dụng</button>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Benefits -->
+                    <div class="benefits-card">
+                        <div class="benefit-item">
+                            <i class="fas fa-shipping-fast"></i>
+                            <span>Giao hàng nhanh 30 phút</span>
+                        </div>
+                        <div class="benefit-item">
+                            <i class="fas fa-undo"></i>
+                            <span>Đổi trả trong 24h nếu không hài lòng</span>
+                        </div>
+                        <div class="benefit-item">
+                            <i class="fas fa-headset"></i>
+                            <span>Hỗ trợ 24/7: 1800-2028</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+</section>
+
+<style>
+    .cart-section {
+        background: var(--bg-light);
+        padding: var(--space-8) 0 var(--space-16);
+    }
+
+    /* Empty Cart */
+    .empty-cart-wrapper {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: 50vh;
+    }
+
+    .empty-cart {
+        text-align: center;
+        padding: var(--space-12);
+        background: white;
+        border-radius: var(--radius-2xl);
+        box-shadow: var(--shadow-lg);
+        max-width: 500px;
+    }
+
+    .empty-icon {
+        width: 120px;
+        height: 120px;
+        background: var(--bg-light);
+        border-radius: var(--radius-full);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0 auto var(--space-6);
+    }
+
+    .empty-icon i {
+        font-size: 48px;
+        color: var(--text-light);
+    }
+
+    .empty-cart h3 {
+        color: var(--text-primary);
+        margin-bottom: var(--space-3);
+    }
+
+    .empty-cart p {
+        color: var(--text-muted);
+        margin-bottom: var(--space-6);
+    }
+
+    /* Cart Card */
+    .cart-card {
+        background: white;
+        border-radius: var(--radius-2xl);
+        box-shadow: var(--shadow-lg);
+        overflow: hidden;
+    }
+
+    .cart-card-header {
+        background: var(--gradient-secondary);
+        color: white;
+        padding: var(--space-4) var(--space-6);
+    }
+
+    .cart-card-header h5 {
+        margin: 0;
+        font-weight: var(--font-semibold);
+    }
+
+    .item-count {
+        background: rgba(255, 255, 255, 0.2);
+        padding: var(--space-1) var(--space-3);
+        border-radius: var(--radius-full);
+        font-size: var(--text-sm);
+    }
+
+    .cart-items {
+        padding: 0;
+    }
+
+    .cart-item {
+        display: flex;
+        align-items: center;
+        gap: var(--space-4);
+        padding: var(--space-4) var(--space-6);
+        border-bottom: 1px solid var(--border-light);
+    }
+
+    .item-image {
+        width: 80px;
+        height: 80px;
+        border-radius: var(--radius-lg);
+        overflow: hidden;
+        flex-shrink: 0;
+    }
+
+    .item-image img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+
+    .item-image .placeholder-img {
+        width: 100%;
+        height: 100%;
+        background: var(--bg-light);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .item-image .placeholder-img i {
+        font-size: 24px;
+        color: var(--text-light);
+    }
+
+    .item-details {
+        flex: 1;
+        min-width: 0;
+    }
+
+    .item-name {
+        font-size: var(--text-base);
+        font-weight: var(--font-semibold);
+        color: var(--text-primary);
+        margin-bottom: var(--space-1);
+    }
+
+    .item-price {
+        font-size: var(--text-sm);
+        color: var(--primary);
+        font-weight: var(--font-medium);
+    }
+
+    .item-notes {
+        font-size: var(--text-xs);
+        color: var(--text-muted);
+        background: var(--bg-light);
+        padding: var(--space-1) var(--space-2);
+        border-radius: var(--radius-sm);
+        margin-top: var(--space-2);
+        display: inline-block;
+    }
+
+    .item-quantity {
+        flex-shrink: 0;
+    }
+
+    .qty-wrapper {
+        display: flex;
+        align-items: center;
+        border: 2px solid var(--border-light);
+        border-radius: var(--radius-lg);
+        overflow: hidden;
+    }
+
+    .qty-btn {
+        width: 36px;
+        height: 36px;
+        border: none;
+        background: var(--bg-light);
+        cursor: pointer;
+        transition: all var(--transition-fast);
+    }
+
+    .qty-btn:hover {
+        background: var(--primary-alpha-10);
+        color: var(--primary);
+    }
+
+    .qty-input {
+        width: 50px;
+        height: 36px;
+        border: none;
+        text-align: center;
+        font-weight: var(--font-semibold);
+        outline: none;
+    }
+
+    .item-subtotal {
+        font-size: var(--text-lg);
+        font-weight: var(--font-bold);
+        color: var(--secondary);
+        min-width: 110px;
+        text-align: right;
+    }
+
+    .btn-remove {
+        background: transparent;
+        border: 2px solid var(--danger);
+        color: var(--danger);
+        width: 40px;
+        height: 40px;
+        border-radius: var(--radius-lg);
+        cursor: pointer;
+        transition: all var(--transition-fast);
+    }
+
+    .btn-remove:hover {
+        background: var(--danger);
+        color: white;
+    }
+
+    /* Notes Form */
+    .notes-form-wrapper {
+        padding: 0 var(--space-6) var(--space-4);
+        background: var(--bg-section);
+    }
+
+    .notes-input-group {
+        display: flex;
+        align-items: center;
+        gap: var(--space-2);
+        background: white;
+        border: 2px solid var(--border-light);
+        border-radius: var(--radius-lg);
+        padding: var(--space-2);
+    }
+
+    .notes-input-group i {
+        color: var(--text-muted);
+        padding-left: var(--space-2);
+    }
+
+    .notes-input-group input {
+        flex: 1;
+        border: none;
+        outline: none;
+        font-size: var(--text-sm);
+        padding: var(--space-2);
+    }
+
+    .btn-save-notes {
+        background: var(--success);
+        color: white;
+        border: none;
+        width: 36px;
+        height: 36px;
+        border-radius: var(--radius-md);
+        cursor: pointer;
+        transition: all var(--transition-fast);
+    }
+
+    .btn-save-notes:hover {
+        background: var(--success-dark);
+    }
+
+    .cart-card-footer {
+        padding: var(--space-4) var(--space-6);
+        background: var(--bg-section);
+    }
+
+    .btn-continue {
+        color: var(--secondary);
+        text-decoration: none;
+        font-weight: var(--font-medium);
+        transition: all var(--transition-fast);
+    }
+
+    .btn-continue:hover {
+        color: var(--primary);
+    }
+
+    /* Summary Card */
+    .summary-card {
+        background: white;
+        border-radius: var(--radius-2xl);
+        box-shadow: var(--shadow-lg);
+        overflow: hidden;
+        position: sticky;
+        top: 100px;
+    }
+
+    .summary-header {
+        background: var(--gradient-secondary);
+        color: white;
+        padding: var(--space-4) var(--space-6);
+    }
+
+    .summary-header h5 {
+        margin: 0;
+        font-weight: var(--font-semibold);
+    }
+
+    .summary-body {
+        padding: var(--space-6);
+    }
+
+    .summary-row {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: var(--space-3) 0;
+        border-bottom: 1px solid var(--border-light);
+    }
+
+    .summary-row span {
+        color: var(--text-secondary);
+    }
+
+    .summary-row strong {
+        color: var(--text-primary);
+    }
+
+    .free-shipping {
+        color: var(--success) !important;
+    }
+
+    .summary-total {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: var(--space-4) 0;
+        margin-top: var(--space-4);
+        border-top: 2px solid var(--secondary);
+    }
+
+    .summary-total span {
+        font-size: var(--text-lg);
+        font-weight: var(--font-semibold);
+        color: var(--text-primary);
+    }
+
+    .summary-total strong {
+        font-size: var(--text-2xl);
+        color: var(--primary);
+    }
+
+    .btn-checkout {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 100%;
+        padding: var(--space-4);
+        background: var(--gradient-success);
+        color: white;
+        border: none;
+        border-radius: var(--radius-full);
+        font-size: var(--text-lg);
+        font-weight: var(--font-semibold);
+        text-decoration: none;
+        transition: all var(--transition-base);
+        margin-top: var(--space-4);
+    }
+
+    .btn-checkout:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 10px 30px rgba(56, 161, 105, 0.3);
+        color: white;
+    }
+
+    .security-info {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: var(--space-2);
+        margin-top: var(--space-4);
+        color: var(--text-muted);
+        font-size: var(--text-sm);
+    }
+
+    .security-info i {
+        color: var(--success);
+    }
+
+    /* Promo Section */
+    .promo-section {
+        padding: var(--space-4) var(--space-6);
+        border-top: 1px solid var(--border-light);
+    }
+
+    .promo-section h6 {
+        color: var(--text-primary);
+        margin-bottom: var(--space-3);
+        font-weight: var(--font-semibold);
+    }
+
+    .promo-input-group {
+        display: flex;
+        gap: var(--space-2);
+    }
+
+    .promo-input-group input {
+        flex: 1;
+        padding: var(--space-2) var(--space-3);
+        border: 2px solid var(--border-light);
+        border-radius: var(--radius-md);
+        font-size: var(--text-sm);
+        outline: none;
+    }
+
+    .promo-input-group input:focus {
+        border-color: var(--primary);
+    }
+
+    .promo-input-group button {
+        padding: var(--space-2) var(--space-4);
+        background: var(--secondary);
+        color: white;
+        border: none;
+        border-radius: var(--radius-md);
+        font-size: var(--text-sm);
+        font-weight: var(--font-medium);
+        cursor: pointer;
+        transition: all var(--transition-fast);
+    }
+
+    .promo-input-group button:hover {
+        background: var(--secondary-light);
+    }
+
+    /* Benefits Card */
+    .benefits-card {
+        background: white;
+        border-radius: var(--radius-xl);
+        padding: var(--space-4);
+        margin-top: var(--space-4);
+        box-shadow: var(--shadow);
+    }
+
+    .benefit-item {
+        display: flex;
+        align-items: center;
+        gap: var(--space-3);
+        padding: var(--space-3);
+        border-radius: var(--radius-md);
+        transition: background var(--transition-fast);
+    }
+
+    .benefit-item:hover {
+        background: var(--bg-light);
+    }
+
+    .benefit-item i {
+        color: var(--primary);
+        font-size: var(--text-lg);
+        width: 24px;
+    }
+
+    .benefit-item span {
+        font-size: var(--text-sm);
+        color: var(--text-secondary);
+    }
+
+    /* Responsive */
+    @@media (max-width: 991px) {
+        .cart-item {
+            flex-wrap: wrap;
+        }
+
+        .item-quantity {
+            order: 4;
+            margin-top: var(--space-3);
+        }
+
+        .item-subtotal {
+            order: 5;
+            margin-top: var(--space-3);
+            min-width: auto;
+        }
+
+        .btn-remove {
+            order: 6;
+            margin-top: var(--space-3);
+        }
+    }
+
+    @@media (max-width: 576px) {
+        .cart-item {
+            flex-direction: column;
+            align-items: flex-start;
+        }
+
+        .item-image {
+            width: 100%;
+            height: 150px;
+        }
+
+        .item-details {
+            width: 100%;
+        }
+
+        .item-quantity,
+        .item-subtotal,
+        .btn-remove {
+            order: unset;
+            margin-top: var(--space-3);
+        }
+
+        .item-subtotal {
+            text-align: left;
+        }
+
+        .summary-card {
+            position: static;
+        }
+    }
+</style>
+
+<script>
+    function changeQty(btn, change) {
+        var form = btn.closest('form');
+        var input = form.querySelector('.qty-input');
+        var newValue = parseInt(input.value) + change;
+        if (newValue >= 1 && newValue <= 99) {
+            input.value = newValue;
+            form.submit();
+        }
+    }
+</script>

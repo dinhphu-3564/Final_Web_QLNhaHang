@@ -1,0 +1,412 @@
+/**
+ * Profile & Orders Pages Specific Styles
+ * Phong cách Phương Nam - Warm & Cozy
+ * Version 3.0
+ */
+
+/* ============================================
+   PROFILE PAGE
+   ============================================ */
+
+.profile-page {
+    min-height: 100vh;
+    background: var(--bg-cream);
+    padding: var(--space-8) 0;
+}
+
+.profile-card {
+    background: white;
+    border-radius: var(--radius-2xl);
+    box-shadow: var(--shadow-xl);
+    overflow: hidden;
+    max-width: 1000px;
+    margin: 0 auto;
+}
+
+/* Profile Header */
+.profile-header {
+    background: linear-gradient(135deg, var(--wood-medium) 0%, var(--wood-dark) 100%);
+    color: white;
+    padding: var(--space-10);
+    text-align: center;
+    position: relative;
+}
+
+.profile-avatar {
+    width: 120px;
+    height: 120px;
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: var(--radius-full);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto var(--space-4);
+    border: 4px solid rgba(255, 255, 255, 0.5);
+    position: relative;
+    z-index: 1;
+}
+
+.profile-avatar i {
+    font-size: 48px;
+}
+
+.profile-name {
+    font-size: var(--text-3xl);
+    font-weight: var(--font-bold);
+    margin-bottom: var(--space-2);
+    position: relative;
+    z-index: 1;
+}
+
+.profile-email {
+    font-size: var(--text-lg);
+    opacity: 0.9;
+    margin-bottom: var(--space-4);
+    position: relative;
+    z-index: 1;
+}
+
+.profile-member-badge {
+    display: inline-flex;
+    align-items: center;
+    background: var(--accent);
+    color: var(--wood-dark);
+    padding: var(--space-2) var(--space-4);
+    border-radius: var(--radius-full);
+    font-size: var(--text-sm);
+    font-weight: var(--font-semibold);
+    position: relative;
+    z-index: 1;
+}
+
+/* Profile Body */
+.profile-body {
+    padding: var(--space-8);
+}
+
+/* Stats Grid */
+.stats-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: var(--space-4);
+    margin-bottom: var(--space-8);
+}
+
+.stat-card-profile {
+    background: var(--bg-cream);
+    border-radius: var(--radius-xl);
+    padding: var(--space-5);
+    display: flex;
+    align-items: center;
+    gap: var(--space-4);
+    transition: all var(--transition-base);
+}
+
+.stat-card-profile:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-lg);
+}
+
+.stat-icon-profile {
+    width: 56px;
+    height: 56px;
+    background: var(--gradient-primary);
+    border-radius: var(--radius-lg);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 24px;
+    flex-shrink: 0;
+}
+
+.stat-icon-profile.orders {
+    background: var(--gradient-accent);
+}
+
+.stat-icon-profile.bookings {
+    background: var(--gradient-success);
+}
+
+.stat-value-profile {
+    font-size: var(--text-2xl);
+    font-weight: var(--font-bold);
+    color: var(--text-primary);
+}
+
+.stat-label-profile {
+    font-size: var(--text-sm);
+    color: var(--text-muted);
+}
+
+/* Section Title */
+.section-title-profile {
+    font-size: var(--text-xl);
+    font-weight: var(--font-bold);
+    color: var(--secondary);
+    margin-bottom: var(--space-4);
+    padding-bottom: var(--space-3);
+    border-bottom: 2px solid var(--primary);
+}
+
+/* Badges */
+.badge-profile {
+    display: inline-flex;
+    align-items: center;
+    padding: var(--space-1) var(--space-3);
+    border-radius: var(--radius-full);
+    font-size: var(--text-xs);
+    font-weight: var(--font-semibold);
+}
+
+.badge-success-profile {
+    background: var(--success-light);
+    color: var(--success-dark);
+}
+
+.badge-warning-profile {
+    background: var(--warning-light);
+    color: var(--warning-dark);
+}
+
+.badge-danger-profile {
+    background: var(--danger-light);
+    color: var(--danger-dark);
+}
+
+.badge-secondary-profile {
+    background: var(--bg-light);
+    color: var(--text-secondary);
+}
+
+.badge-vnpay {
+    background: #e6f0ff;
+    color: #0066cc;
+}
+
+.badge-momo {
+    background: #fce4ec;
+    color: #ae2070;
+}
+
+.badge-cod {
+    background: var(--warning-light);
+    color: var(--warning-dark);
+}
+
+/* ============================================
+   ORDERS PAGE
+   ============================================ */
+
+.orders-section {
+    background: var(--bg-cream);
+    padding: var(--space-8) 0 var(--space-16);
+}
+
+.orders-card {
+    background: white;
+    border-radius: var(--radius-2xl);
+    box-shadow: var(--shadow-lg);
+    overflow: hidden;
+}
+
+.orders-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: var(--space-5) var(--space-6);
+    background: linear-gradient(135deg, var(--wood-medium) 0%, var(--wood-dark) 100%);
+    color: white;
+}
+
+.orders-header-title {
+    font-size: var(--text-lg);
+    font-weight: var(--font-semibold);
+}
+
+.orders-count {
+    background: rgba(255, 255, 255, 0.2);
+    padding: var(--space-1) var(--space-3);
+    border-radius: var(--radius-full);
+    font-size: var(--text-sm);
+}
+
+.orders-body {
+    padding: var(--space-5);
+}
+
+/* Order Item Card */
+.order-item {
+    background: var(--bg-cream);
+    border-radius: var(--radius-xl);
+    padding: var(--space-5);
+    margin-bottom: var(--space-4);
+    transition: all var(--transition-fast);
+    border-left: 4px solid var(--primary);
+}
+
+.order-item:hover {
+    box-shadow: var(--shadow-lg);
+    transform: translateX(4px);
+}
+
+.order-item:last-child {
+    margin-bottom: 0;
+}
+
+.order-item-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: var(--space-4);
+    padding-bottom: var(--space-3);
+    border-bottom: 1px solid var(--border-light);
+}
+
+.order-number strong {
+    display: block;
+    font-size: var(--text-lg);
+    color: var(--secondary);
+    margin-bottom: var(--space-1);
+}
+
+.order-date {
+    font-size: var(--text-sm);
+    color: var(--text-muted);
+}
+
+.order-amount {
+    font-size: var(--text-xl);
+    font-weight: var(--font-bold);
+    color: var(--primary);
+}
+
+.order-item-body {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: var(--space-3);
+}
+
+.order-badges {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-2);
+}
+
+/* Buttons */
+.btn-user-sm {
+    min-height: 40px;
+    padding: var(--space-2) var(--space-4);
+    font-size: var(--text-sm);
+    border-radius: var(--radius-lg);
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-1);
+    text-decoration: none;
+    transition: all var(--transition-fast);
+}
+
+.btn-user-secondary {
+    background: white;
+    color: var(--secondary);
+    border: 2px solid var(--border);
+}
+
+.btn-user-secondary:hover {
+    background: var(--primary);
+    color: white;
+    border-color: var(--primary);
+}
+
+/* Empty Orders */
+.empty-orders {
+    background: white;
+    border-radius: var(--radius-2xl);
+    padding: var(--space-12) var(--space-8);
+    text-align: center;
+    box-shadow: var(--shadow-lg);
+}
+
+.empty-orders-icon {
+    width: 120px;
+    height: 120px;
+    background: var(--primary-alpha-10);
+    border-radius: var(--radius-full);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto var(--space-6);
+}
+
+.empty-orders-icon i {
+    font-size: 56px;
+    color: var(--primary);
+}
+
+.empty-orders h3 {
+    font-size: var(--text-2xl);
+    font-weight: var(--font-bold);
+    color: var(--text-primary);
+    margin-bottom: var(--space-3);
+}
+
+.empty-orders p {
+    font-size: var(--text-lg);
+    color: var(--text-muted);
+    margin-bottom: var(--space-6);
+}
+
+/* ============================================
+   RESPONSIVE
+   ============================================ */
+
+@media (max-width: 1024px) {
+    .stats-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 768px) {
+    .profile-body {
+        padding: var(--space-6);
+    }
+
+    .stats-grid {
+        grid-template-columns: 1fr 1fr;
+        gap: var(--space-3);
+    }
+
+    .stat-card-profile {
+        padding: var(--space-4);
+        flex-direction: column;
+        text-align: center;
+    }
+
+    .order-item-body {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .order-badges {
+        margin-bottom: var(--space-3);
+    }
+}
+
+@media (max-width: 576px) {
+    .profile-header {
+        padding: var(--space-8);
+    }
+
+    .profile-avatar {
+        width: 100px;
+        height: 100px;
+    }
+
+    .orders-header {
+        flex-direction: column;
+        gap: var(--space-2);
+        text-align: center;
+    }
+}

@@ -1,0 +1,213 @@
+@{
+    ViewData["Title"] = "Giới thiệu";
+}
+
+<!-- Page Banner -->
+<div class="page-banner-user">
+    <div class="container-user">
+        <h1 class="page-banner-title">Giới thiệu</h1>
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb-user">
+                <li class="breadcrumb-item-user"><a asp-controller="Home" asp-action="Index">Trang chủ</a></li>
+                <li class="breadcrumb-item-user active" aria-current="page">Giới thiệu</li>
+            </ol>
+        </nav>
+    </div>
+</div>
+
+<!-- About Content -->
+<section class="about-page-section">
+    <div class="container-user">
+        <!-- Main Story Section -->
+        <div class="about-card">
+            <div class="about-header">
+                <h2>Nhà Hàng Việt - Khám Phá Ẩm Thực Việt Nam</h2>
+                <div class="header-divider"></div>
+            </div>
+            
+            <div class="row g-5">
+                <!-- Featured Image -->
+                <div class="col-lg-5">
+                    <div class="about-image-wrapper">
+                        <img src="/images/dishes/lau-ca-keo.png" alt="Nhà hàng Việt" class="about-main-image">
+                        <div class="about-image-badge">
+                            <i class="fas fa-utensils"></i>
+                            <span>Hơn 50 món</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Content -->
+                <div class="col-lg-7">
+                    <div class="about-content-text">
+                        <p class="lead-text">
+                            Được thành lập từ tình yêu, niềm đam mê bất tận với các món ăn và nếp văn hóa của người dân Việt Nam,
+                            <strong>Nhà Hàng Việt</strong> đã chính thức đi vào hoạt động, mang một làn gió ẩm thực mới đến với thực khách.
+                        </p>
+
+                        <p>
+                            Với tiêu chí luôn nỗ lực không ngừng để có những món ăn ngon, nhân viên phục vụ thân thiện và dịch vụ tốt 
+                            làm hài lòng mọi quý khách hàng (ngay cả những thực khách khó tính nhất), Nhà Hàng Việt đã không ngừng 
+                            mở rộng quy mô hoạt động.
+                        </p>
+
+                        <div class="highlight-box-about">
+                            <h4><i class="fas fa-star me-2"></i>Món ăn đặc trưng:</h4>
+                            <ul class="dishes-list-about">
+                                <li><i class="fas fa-check-circle"></i> Lẩu cá kèo đệ nhất</li>
+                                <li><i class="fas fa-check-circle"></i> Bánh tráng phơi sương cuốn</li>
+                                <li><i class="fas fa-check-circle"></i> Cá kèo muối ớt</li>
+                                <li><i class="fas fa-check-circle"></i> Lẩu gà lá giang</li>
+                            </ul>
+                        </div>
+
+                        <div class="hotline-banner">
+                            <i class="fas fa-phone-volume"></i>
+                            <div>
+                                <span>Hotline đặt bàn</span>
+                                <strong>1800 2028</strong>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Features Section -->
+        <div class="features-card">
+            <div class="row g-5 align-items-center">
+                <!-- Restaurant Image -->
+                <div class="col-lg-6">
+                    <div class="feature-image-wrapper">
+                        <img src="/images/restaurant-interior.jpg" alt="Không gian nhà hàng" 
+                             onerror="this.src='https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?w=800'">
+                    </div>
+                </div>
+
+                <!-- Features Content -->
+                <div class="col-lg-6">
+                    <h3 class="features-title">Hương vị Việt - Tinh hoa ẩm thực</h3>
+                    <p class="features-desc">
+                        Nhà hàng Việt được thiết lập với sứ mệnh phát triển giá trị ẩm thực truyền thống của người Việt. 
+                        Chúng tôi tự hào món ăn không chỉ là thực phẩm mà còn là dấu ấn văn hóa.
+                    </p>
+                    
+                    <ul class="feature-list-about">
+                        <li>
+                            <div class="feature-icon-about"><i class="fas fa-check"></i></div>
+                            <div>
+                                <strong>Nguyên liệu tươi ngon</strong>
+                                <p>Chọn lọc kỹ càng từ các nguồn cung cấp uy tín</p>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="feature-icon-about"><i class="fas fa-check"></i></div>
+                            <div>
+                                <strong>Không gian ấm cúng</strong>
+                                <p>Thiết kế theo phong cách truyền thống Việt Nam</p>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="feature-icon-about"><i class="fas fa-check"></i></div>
+                            <div>
+                                <strong>Đầu bếp hàng đầu</strong>
+                                <p>Đội ngũ đầu bếp giàu kinh nghiệm và tâm huyết</p>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="feature-icon-about"><i class="fas fa-check"></i></div>
+                            <div>
+                                <strong>Phục vụ tận tâm</strong>
+                                <p>Đội ngũ nhân viên chuyên nghiệp, thân thiện</p>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Chef Team Section -->
+        <div class="chef-card">
+            <div class="chef-header-section">
+                <h2>Đội ngũ đầu bếp</h2>
+                <p>Những nghệ nhân tạo nên hương vị đặc sắc</p>
+            </div>
+
+            <div class="chef-grid">
+                <div class="chef-item">
+                    <div class="chef-avatar-about">
+                        <i class="fas fa-user-circle"></i>
+                    </div>
+                    <h4>Nguyễn Văn A</h4>
+                    <span class="chef-role-about">Bếp trưởng</span>
+                    <p>Hơn 20 năm kinh nghiệm trong ẩm thực Việt, từng làm việc tại các khách sạn 5 sao.</p>
+                </div>
+
+                <div class="chef-item">
+                    <div class="chef-avatar-about">
+                        <i class="fas fa-user-circle"></i>
+                    </div>
+                    <h4>Trần Thị B</h4>
+                    <span class="chef-role-about">Bếp phó</span>
+                    <p>Chuyên gia về các món ăn đặc sản miền Nam.</p>
+                </div>
+
+                <div class="chef-item">
+                    <div class="chef-avatar-about">
+                        <i class="fas fa-user-circle"></i>
+                    </div>
+                    <h4>Lê Văn C</h4>
+                    <span class="chef-role-about">Trưởng bộ phận nướng</span>
+                    <p>Nghệ nhân với tay nghề gia truyền.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Gallery Section -->
+        <div class="gallery-card">
+            <h3 class="gallery-title"><i class="fas fa-images me-2"></i>Hình ảnh món ăn</h3>
+            <div class="gallery-grid-about">
+                <div class="gallery-item-about">
+                    <img src="/images/dishes/ca-keo-muoi-ot.png" alt="Cá kèo muối ớt">
+                    <div class="gallery-overlay">
+                        <h4>Cá Kèo Muối Ớt</h4>
+                    </div>
+                </div>
+                <div class="gallery-item-about">
+                    <img src="/images/dishes/lau-ca-keo.png" alt="Lẩu cá kèo">
+                    <div class="gallery-overlay">
+                        <h4>Lẩu Cá Kèo</h4>
+                    </div>
+                </div>
+                <div class="gallery-item-about">
+                    <img src="/images/dishes/banh-trang-cuon.png" alt="Bánh tráng cuốn">
+                    <div class="gallery-overlay">
+                        <h4>Bánh Tráng Cuốn</h4>
+                    </div>
+                </div>
+                <div class="gallery-item-about">
+                    <img src="/images/dishes/banh-xeo.png" alt="Bánh xèo">
+                    <div class="gallery-overlay">
+                        <h4>Bánh Xèo</h4>
+                    </div>
+                </div>
+                <div class="gallery-item-about">
+                    <img src="/images/dishes/lau-ga-la-giang.png" alt="Lẩu gà lá giang">
+                    <div class="gallery-overlay">
+                        <h4>Lẩu Gà Lá Giang</h4>
+                    </div>
+                </div>
+                <div class="gallery-item-about">
+                    <img src="/images/dishes/vit-nuong-chao.png" alt="Vịt nướng chao">
+                    <div class="gallery-overlay">
+                        <h4>Vịt Nướng Chao</h4>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+@section Styles {
+    <link rel="stylesheet" href="~/css/user-about.css" asp-append-version="true" />
+}

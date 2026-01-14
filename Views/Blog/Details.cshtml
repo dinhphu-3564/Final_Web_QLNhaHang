@@ -1,0 +1,57 @@
+@model Web_QLNhaHang.Models.BlogPost
+@{
+    ViewData["Title"] = Model.Title;
+}
+
+<!-- Page Banner -->
+<div class="page-banner">
+    <div class="container">
+        <h1>Chi tiết bài viết</h1>
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a asp-controller="Home" asp-action="Index">Trang chủ</a></li>
+                <li class="breadcrumb-item"><a asp-controller="Blog" asp-action="Index">Blog</a></li>
+                <li class="breadcrumb-item active" aria-current="page">@Model.Title</li>
+            </ol>
+        </nav>
+    </div>
+</div>
+
+<div class="container mb-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-10">
+            <div class="bg-white p-4 p-md-5 rounded shadow">
+                <span class="text-muted mb-3 d-block">
+                    <i class="far fa-calendar-alt me-2"></i>@Model.PublishedDate.ToString("dd/MM/yyyy") 
+                    <span class="mx-2">|</span> 
+                    <i class="far fa-user me-2"></i>@Model.Author
+                </span>
+                
+                <h1 class="fw-bold mb-4 text-dark">@Model.Title</h1>
+                
+                <div class="mb-4">
+                    <img src="@Model.ImageUrl" class="img-fluid rounded w-100" alt="@Model.Title">
+                </div>
+                
+                <div class="blog-post-content text-dark" style="font-size: 1.1rem; line-height: 1.8;">
+                    @Html.Raw(Model.Content)
+                </div>
+                
+                <div class="mt-5 pt-4 border-top">
+                    <h5>Chia sẻ bài viết</h5>
+                    <div class="social-icons">
+                        <a href="#" style="background:#3b5998;"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#" style="background:#1da1f2;"><i class="fab fa-twitter"></i></a>
+                        <a href="#" style="background:#0077b5;"><i class="fab fa-linkedin-in"></i></a>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="text-center mt-5">
+                <a asp-action="Index" class="btn btn-outline-success rounded-pill px-4">
+                    <i class="fas fa-arrow-left me-2"></i> Trở về danh sách
+                </a>
+            </div>
+        </div>
+    </div>
+</div>

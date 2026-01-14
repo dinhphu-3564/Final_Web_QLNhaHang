@@ -1,0 +1,65 @@
+@model Web_QLNhaHang.Models.Customer
+@{
+    ViewData["Title"] = "Chi tiết khách hàng";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<h2>Chi tiết khách hàng</h2>
+
+<div class="row">
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header">
+                <h5>Thông tin khách hàng</h5>
+            </div>
+            <div class="card-body">
+                <p><strong>Họ tên:</strong> @Model.FullName</p>
+                <p><strong>SĐT:</strong> @Model.PhoneNumber</p>
+                <p><strong>Email:</strong> @Model.Email</p>
+                <p><strong>Địa chỉ:</strong> @Model.Address</p>
+                <p><strong>Điểm tích lũy:</strong> @Model.LoyaltyPoints</p>
+                <p><strong>Ngày đăng ký:</strong> @Model.CreatedDate.ToString("dd/MM/yyyy")</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header">
+                <h5>Lịch sử đặt bàn</h5>
+            </div>
+            <div class="card-body">
+                @if (Model.Bookings != null && Model.Bookings.Any())
+                {
+                    <table class="table table-sm">
+                        <thead>
+                            <tr>
+                                <th>Ngày</th>
+                                <th>Số khách</th>
+                                <th>Trạng thái</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var booking in Model.Bookings.Take(5))
+                            {
+                                <tr>
+                                    <td>@booking.BookingDate.ToString("dd/MM/yyyy")</td>
+                                    <td>@booking.NumberOfGuests</td>
+                                    <td>@booking.Status</td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                }
+                else
+                {
+                    <p>Chưa có đặt bàn nào.</p>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="mt-3">
+    <a asp-action="Index" class="btn btn-secondary">Quay lại</a>
+</div>
+

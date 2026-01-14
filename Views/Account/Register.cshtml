@@ -1,0 +1,181 @@
+@{
+    ViewData["Title"] = "Đăng ký tài khoản";
+}
+
+<div class="auth-page">
+    <div class="container-user">
+        <div class="auth-card">
+            <div class="row g-0">
+                <!-- Left Side - Promo -->
+                <div class="col-lg-5 auth-left">
+                    <div class="auth-left-content">
+                        <div class="auth-logo">
+                            <i class="fas fa-leaf"></i>
+                        </div>
+                        <h2>Nhà hàng Việt</h2>
+                        <p>Tạo tài khoản để trở thành thành viên và nhận nhiều ưu đãi hấp dẫn.</p>
+                        
+                        <ul class="auth-features">
+                            <li>
+                                <span class="feature-icon"><i class="fas fa-gift"></i></span>
+                                Nhận 100 điểm khi đăng ký
+                            </li>
+                            <li>
+                                <span class="feature-icon"><i class="fas fa-percent"></i></span>
+                                Giảm 10% đơn hàng đầu tiên
+                            </li>
+                            <li>
+                                <span class="feature-icon"><i class="fas fa-birthday-cake"></i></span>
+                                Ưu đãi sinh nhật đặc biệt
+                            </li>
+                            <li>
+                                <span class="feature-icon"><i class="fas fa-star"></i></span>
+                                Tích điểm đổi quà
+                            </li>
+                            <li>
+                                <span class="feature-icon"><i class="fas fa-bell"></i></span>
+                                Thông báo khuyến mãi sớm nhất
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Right Side - Register Form -->
+                <div class="col-lg-7 auth-right">
+                    <div class="auth-form-wrapper">
+                        <div class="auth-header">
+                            <h3><i class="fas fa-user-plus me-2"></i>Đăng ký tài khoản</h3>
+                            <p>Tham gia cùng hàng nghìn thành viên khác!</p>
+                        </div>
+
+                        @if (!ViewData.ModelState.IsValid)
+                        {
+                            <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                                @foreach (var error in ViewData.ModelState.Values.SelectMany(v => v.Errors))
+                                {
+                                    <div><i class="fas fa-exclamation-circle me-2"></i>@error.ErrorMessage</div>
+                                }
+                                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                            </div>
+                        }
+
+                        <form asp-action="Register" method="post" class="auth-form">
+                            <div class="row g-3">
+                                <div class="col-md-6">
+                                    <div class="form-group-auth">
+                                        <label class="form-label-auth">
+                                            <i class="fas fa-user me-2"></i>Họ và tên <span class="required">*</span>
+                                        </label>
+                                        <input type="text" name="fullName" class="form-input-auth" 
+                                               placeholder="Nhập họ và tên" required autofocus />
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group-auth">
+                                        <label class="form-label-auth">
+                                            <i class="fas fa-phone me-2"></i>Số điện thoại <span class="required">*</span>
+                                        </label>
+                                        <input type="tel" name="phone" class="form-input-auth" 
+                                               placeholder="Nhập số điện thoại" required />
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="form-group-auth">
+                                <label class="form-label-auth">
+                                    <i class="fas fa-envelope me-2"></i>Email
+                                </label>
+                                <input type="email" name="email" class="form-input-auth" 
+                                       placeholder="Nhập email (không bắt buộc)" />
+                            </div>
+
+                            <div class="form-group-auth">
+                                <label class="form-label-auth">
+                                    <i class="fas fa-lock me-2"></i>Mật khẩu <span class="required">*</span>
+                                </label>
+                                <div class="password-wrapper">
+                                    <input type="password" name="password" id="password" class="form-input-auth" 
+                                           placeholder="Nhập mật khẩu (ít nhất 6 ký tự)" required minlength="6" />
+                                    <button type="button" class="password-toggle" onclick="togglePassword('password')">
+                                        <i class="fas fa-eye"></i>
+                                    </button>
+                                </div>
+                                <div class="password-strength">
+                                    <div class="password-strength-bar" id="passwordStrength"></div>
+                                </div>
+                                <small class="form-hint-auth">Mật khẩu ít nhất 6 ký tự</small>
+                            </div>
+
+                            <div class="form-group-auth">
+                                <label class="form-label-auth">
+                                    <i class="fas fa-lock me-2"></i>Xác nhận mật khẩu <span class="required">*</span>
+                                </label>
+                                <div class="password-wrapper">
+                                    <input type="password" name="confirmPassword" id="confirmPassword" class="form-input-auth" 
+                                           placeholder="Nhập lại mật khẩu" required />
+                                    <button type="button" class="password-toggle" onclick="togglePassword('confirmPassword')">
+                                        <i class="fas fa-eye"></i>
+                                    </button>
+                                </div>
+                            </div>
+
+                            <div class="form-check-custom terms-check">
+                                <input type="checkbox" class="form-check-input-custom" id="terms" required>
+                                <label class="form-check-label-custom" for="terms">
+                                    Tôi đồng ý với <a href="#">Điều khoản sử dụng</a> 
+                                    và <a href="#">Chính sách bảo mật</a>
+                                </label>
+                            </div>
+
+                            <button type="submit" class="btn-user btn-user-primary btn-user-block btn-user-xl">
+                                <i class="fas fa-user-plus me-2"></i>Đăng ký
+                            </button>
+                        </form>
+
+                        <div class="auth-footer">
+                            <span>Đã có tài khoản?</span>
+                            <a asp-action="Login" class="register-link">Đăng nhập ngay</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Styles {
+    <link rel="stylesheet" href="~/css/user-auth.css" asp-append-version="true" />
+}
+
+@section Scripts {
+    <script>
+        function togglePassword(inputId) {
+            var input = document.getElementById(inputId);
+            var icon = input.nextElementSibling.querySelector('i');
+            if (input.type === 'password') {
+                input.type = 'text';
+                icon.classList.remove('fa-eye');
+                icon.classList.add('fa-eye-slash');
+            } else {
+                input.type = 'password';
+                icon.classList.remove('fa-eye-slash');
+                icon.classList.add('fa-eye');
+            }
+        }
+
+        document.getElementById('password').addEventListener('input', function() {
+            var password = this.value;
+            var strengthBar = document.getElementById('passwordStrength');
+            
+            strengthBar.className = 'password-strength-bar';
+            
+            if (password.length >= 8 && /[A-Z]/.test(password) && /[0-9]/.test(password)) {
+                strengthBar.classList.add('strong');
+            } else if (password.length >= 6) {
+                strengthBar.classList.add('medium');
+            } else if (password.length > 0) {
+                strengthBar.classList.add('weak');
+            }
+        });
+    </script>
+}

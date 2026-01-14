@@ -1,0 +1,533 @@
+@model Web_QLNhaHang.Models.Dish
+@{
+    ViewData["Title"] = Model.DishName;
+}
+
+<!-- Page Banner -->
+<div class="page-banner" style="padding: var(--space-8) 0;">
+    <div class="container">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb mb-0">
+                <li class="breadcrumb-item"><a asp-controller="Home" asp-action="Index">Trang chủ</a></li>
+                <li class="breadcrumb-item"><a asp-controller="Menu" asp-action="Index">Thực đơn</a></li>
+                <li class="breadcrumb-item active" aria-current="page">@Model.DishName</li>
+            </ol>
+        </nav>
+    </div>
+</div>
+
+<section class="product-detail-section">
+    <div class="container">
+        <div class="product-card">
+            <div class="row g-0">
+                <!-- Product Image -->
+                <div class="col-lg-6">
+                    <div class="product-image">
+                        @if (!string.IsNullOrEmpty(Model.ImageUrl))
+                        {
+                            <img src="@Model.ImageUrl" alt="@Model.DishName">
+                        }
+                        else
+                        {
+                            <div class="placeholder-image">
+                                <i class="fas fa-utensils"></i>
+                            </div>
+                        }
+                        
+                        @if (Model.IsFeatured)
+                        {
+                            <span class="product-badge">
+                                <i class="fas fa-fire me-1"></i>Món hot
+                            </span>
+                        }
+                    </div>
+                </div>
+
+                <!-- Product Info -->
+                <div class="col-lg-6">
+                    <div class="product-info">
+                        <div class="product-category">
+                            <i class="fas fa-tag me-1"></i>
+                            @(Model.Category?.CategoryName ?? "Món đặc trưng")
+                        </div>
+                        
+                        <h1 class="product-title">@Model.DishName</h1>
+                        
+                        <div class="product-rating">
+                            <div class="stars">
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star-half-alt"></i>
+                            </div>
+                            <span class="rating-text">4.8 (124 đánh giá)</span>
+                        </div>
+                        
+                        <div class="product-price-wrapper">
+                            <span class="product-price">@Model.Price.ToString("N0")₫</span>
+                        </div>
+                        
+                        <p class="product-description">@Model.Description</p>
+
+                        @if (Model.IsAvailable)
+                        {
+                            <div class="product-actions">
+                                <div class="quantity-selector">
+                                    <button type="button" class="qty-btn minus" onclick="updateQty(-1)">
+                                        <i class="fas fa-minus"></i>
+                                    </button>
+                                    <input type="number" id="quantity" value="1" min="1" readonly>
+                                    <button type="button" class="qty-btn plus" onclick="updateQty(1)">
+                                        <i class="fas fa-plus"></i>
+                                    </button>
+                                </div>
+                                
+                                <button class="btn-add-to-cart" onclick="addToCart(@Model.DishId)">
+                                    <i class="fas fa-shopping-cart me-2"></i>
+                                    Thêm vào giỏ hàng
+                                </button>
+                            </div>
+                            
+                            <div class="product-features">
+                                <div class="feature">
+                                    <i class="fas fa-check-circle"></i>
+                                    <span>Nguyên liệu tươi ngon</span>
+                                </div>
+                                <div class="feature">
+                                    <i class="fas fa-check-circle"></i>
+                                    <span>Chế biến theo yêu cầu</span>
+                                </div>
+                                <div class="feature">
+                                    <i class="fas fa-check-circle"></i>
+                                    <span>Giao hàng nhanh 30 phút</span>
+                                </div>
+                            </div>
+                        }
+                        else
+                        {
+                            <div class="out-of-stock">
+                                <i class="fas fa-exclamation-triangle me-2"></i>
+                                Món ăn tạm thời hết hàng
+                            </div>
+                        }
+
+                        <div class="category-link">
+                            <a asp-controller="Menu" asp-action="Index" asp-route-categoryId="@Model.CategoryId">
+                                <i class="fas fa-arrow-left me-2"></i>
+                                Xem thêm món cùng danh mục
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Related Dishes -->
+        @if (ViewBag.RelatedDishes != null)
+        {
+            var relatedDishes = ViewBag.RelatedDishes as List<Web_QLNhaHang.Models.Dish>;
+            if (relatedDishes != null && relatedDishes.Any())
+            {
+                <div class="related-section">
+                    <h3 class="section-title">
+                        <i class="fas fa-utensils me-2"></i>
+                        Món ăn liên quan
+                    </h3>
+                    
+                    <div class="related-grid">
+                        @foreach (var dish in relatedDishes.Take(4))
+                        {
+                            <a asp-action="Details" asp-route-id="@dish.DishId" class="related-card">
+                                <div class="related-image">
+                                    @if (!string.IsNullOrEmpty(dish.ImageUrl))
+                                    {
+                                        <img src="@dish.ImageUrl" alt="@dish.DishName">
+                                    }
+                                    else
+                                    {
+                                        <div class="placeholder-img">
+                                            <i class="fas fa-utensils"></i>
+                                        </div>
+                                    }
+                                </div>
+                                <div class="related-info">
+                                    <h4>@dish.DishName</h4>
+                                    <span class="related-price">@dish.Price.ToString("N0")₫</span>
+                                </div>
+                            </a>
+                        }
+                    </div>
+                </div>
+            }
+        }
+    </div>
+</section>
+
+<style>
+    .product-detail-section {
+        background: var(--bg-light);
+        padding: var(--space-8) 0 var(--space-16);
+    }
+
+    .product-card {
+        background: white;
+        border-radius: var(--radius-2xl);
+        overflow: hidden;
+        box-shadow: var(--shadow-lg);
+    }
+
+    .product-image {
+        position: relative;
+        height: 100%;
+        min-height: 500px;
+    }
+
+    .product-image img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+
+    .placeholder-image {
+        width: 100%;
+        height: 100%;
+        min-height: 500px;
+        background: var(--bg-light);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .placeholder-image i {
+        font-size: 80px;
+        color: var(--text-light);
+    }
+
+    .product-badge {
+        position: absolute;
+        top: var(--space-4);
+        left: var(--space-4);
+        background: var(--gradient-primary);
+        color: white;
+        padding: var(--space-2) var(--space-4);
+        border-radius: var(--radius-full);
+        font-size: var(--text-sm);
+        font-weight: var(--font-bold);
+    }
+
+    .product-info {
+        padding: var(--space-10);
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        height: 100%;
+    }
+
+    .product-category {
+        font-size: var(--text-sm);
+        color: var(--primary);
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        font-weight: var(--font-semibold);
+        margin-bottom: var(--space-3);
+    }
+
+    .product-title {
+        font-size: var(--text-3xl);
+        font-weight: var(--font-bold);
+        color: var(--text-primary);
+        margin-bottom: var(--space-3);
+    }
+
+    .product-rating {
+        display: flex;
+        align-items: center;
+        gap: var(--space-3);
+        margin-bottom: var(--space-4);
+    }
+
+    .product-rating .stars {
+        color: var(--accent);
+    }
+
+    .rating-text {
+        color: var(--text-muted);
+        font-size: var(--text-sm);
+    }
+
+    .product-price-wrapper {
+        margin-bottom: var(--space-6);
+    }
+
+    .product-price {
+        font-size: var(--text-3xl);
+        font-weight: var(--font-bold);
+        color: var(--primary);
+    }
+
+    .product-description {
+        font-size: var(--text-base);
+        color: var(--text-secondary);
+        line-height: var(--leading-relaxed);
+        margin-bottom: var(--space-6);
+    }
+
+    .product-actions {
+        display: flex;
+        gap: var(--space-4);
+        margin-bottom: var(--space-6);
+        flex-wrap: wrap;
+    }
+
+    .quantity-selector {
+        display: flex;
+        align-items: center;
+        border: 2px solid var(--border-light);
+        border-radius: var(--radius-lg);
+        overflow: hidden;
+    }
+
+    .qty-btn {
+        width: 48px;
+        height: 48px;
+        border: none;
+        background: var(--bg-light);
+        cursor: pointer;
+        transition: all var(--transition-fast);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .qty-btn:hover {
+        background: var(--primary-alpha-10);
+        color: var(--primary);
+    }
+
+    .quantity-selector input {
+        width: 60px;
+        height: 48px;
+        border: none;
+        text-align: center;
+        font-size: var(--text-lg);
+        font-weight: var(--font-semibold);
+        outline: none;
+    }
+
+    .btn-add-to-cart {
+        flex: 1;
+        min-height: 48px;
+        background: var(--gradient-primary);
+        color: white;
+        border: none;
+        border-radius: var(--radius-lg);
+        padding: var(--space-3) var(--space-6);
+        font-size: var(--text-base);
+        font-weight: var(--font-semibold);
+        cursor: pointer;
+        transition: all var(--transition-base);
+    }
+
+    .btn-add-to-cart:hover {
+        transform: translateY(-2px);
+        box-shadow: var(--shadow-primary);
+    }
+
+    .product-features {
+        display: flex;
+        flex-direction: column;
+        gap: var(--space-3);
+        padding: var(--space-5);
+        background: var(--bg-light);
+        border-radius: var(--radius-lg);
+        margin-bottom: var(--space-6);
+    }
+
+    .product-features .feature {
+        display: flex;
+        align-items: center;
+        gap: var(--space-3);
+        color: var(--text-secondary);
+        font-size: var(--text-sm);
+    }
+
+    .product-features .feature i {
+        color: var(--success);
+    }
+
+    .out-of-stock {
+        background: var(--danger-light);
+        color: var(--danger-dark);
+        padding: var(--space-4);
+        border-radius: var(--radius-lg);
+        font-weight: var(--font-medium);
+        margin-bottom: var(--space-6);
+    }
+
+    .category-link a {
+        color: var(--primary);
+        text-decoration: none;
+        font-weight: var(--font-medium);
+        transition: all var(--transition-fast);
+    }
+
+    .category-link a:hover {
+        text-decoration: underline;
+    }
+
+    /* Related Section */
+    .related-section {
+        margin-top: var(--space-12);
+    }
+
+    .section-title {
+        font-size: var(--text-2xl);
+        font-weight: var(--font-bold);
+        color: var(--text-primary);
+        margin-bottom: var(--space-6);
+    }
+
+    .related-grid {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: var(--space-4);
+    }
+
+    .related-card {
+        background: white;
+        border-radius: var(--radius-xl);
+        overflow: hidden;
+        box-shadow: var(--shadow);
+        text-decoration: none;
+        transition: all var(--transition-base);
+    }
+
+    .related-card:hover {
+        transform: translateY(-5px);
+        box-shadow: var(--shadow-lg);
+    }
+
+    .related-image {
+        height: 180px;
+        overflow: hidden;
+    }
+
+    .related-image img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        transition: transform var(--transition-slow);
+    }
+
+    .related-card:hover .related-image img {
+        transform: scale(1.1);
+    }
+
+    .related-info {
+        padding: var(--space-4);
+    }
+
+    .related-info h4 {
+        font-size: var(--text-base);
+        font-weight: var(--font-semibold);
+        color: var(--text-primary);
+        margin-bottom: var(--space-2);
+        line-height: var(--leading-tight);
+    }
+
+    .related-price {
+        font-size: var(--text-lg);
+        font-weight: var(--font-bold);
+        color: var(--primary);
+    }
+
+    @@media (max-width: 992px) {
+        .product-image {
+            min-height: 350px;
+        }
+
+        .product-info {
+            padding: var(--space-6);
+        }
+
+        .product-title {
+            font-size: var(--text-2xl);
+        }
+
+        .related-grid {
+            grid-template-columns: repeat(2, 1fr);
+        }
+    }
+
+    @@media (max-width: 576px) {
+        .product-info {
+            padding: var(--space-5);
+        }
+
+        .product-title {
+            font-size: var(--text-xl);
+        }
+
+        .product-price {
+            font-size: var(--text-2xl);
+        }
+
+        .product-actions {
+            flex-direction: column;
+        }
+
+        .quantity-selector {
+            justify-content: center;
+        }
+
+        .related-grid {
+            grid-template-columns: repeat(2, 1fr);
+            gap: var(--space-3);
+        }
+
+        .related-image {
+            height: 140px;
+        }
+    }
+</style>
+
+@section Scripts {
+    <script>
+        function updateQty(change) {
+            var input = document.getElementById('quantity');
+            var newValue = parseInt(input.value) + change;
+            if (newValue >= 1) {
+                input.value = newValue;
+            }
+        }
+
+        function addToCart(dishId) {
+            var quantity = parseInt($('#quantity').val()) || 1;
+            var $btn = $('.btn-add-to-cart');
+            var originalHtml = $btn.html();
+            
+            $btn.prop('disabled', true).html('<i class="fas fa-spinner fa-spin me-2"></i>Đang thêm...');
+
+            $.ajax({
+                url: '@Url.Action("AddToCart", "Cart")',
+                type: 'POST',
+                data: { dishId: dishId, quantity: quantity },
+                success: function(data) {
+                    $btn.prop('disabled', false).html(originalHtml);
+                    
+                    if (data && data.success) {
+                        updateCartCount(data.cartCount || 0);
+                        showToast('Đã thêm ' + quantity + ' món vào giỏ hàng!', 'success');
+                    } else {
+                        showToast(data.message || 'Có lỗi xảy ra!', 'error');
+                    }
+                },
+                error: function() {
+                    $btn.prop('disabled', false).html(originalHtml);
+                    showToast('Có lỗi kết nối. Vui lòng thử lại!', 'error');
+                }
+            });
+        }
+    </script>
+}

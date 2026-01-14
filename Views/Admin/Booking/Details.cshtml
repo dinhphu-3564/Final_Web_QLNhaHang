@@ -1,0 +1,64 @@
+@model Web_QLNhaHang.Models.Booking
+@{
+    ViewData["Title"] = "Chi tiết đặt bàn";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<h2>Chi tiết đặt bàn</h2>
+
+<div class="card">
+    <div class="card-header">
+        <h5>Thông tin đặt bàn</h5>
+    </div>
+    <div class="card-body">
+        <div class="row">
+            <div class="col-md-6">
+                <p><strong>Mã đặt bàn:</strong> #@Model.BookingId</p>
+                <p><strong>Khách hàng:</strong> @Model.CustomerName</p>
+                <p><strong>SĐT:</strong> @Model.CustomerPhone</p>
+                <p><strong>Email:</strong> @Model.CustomerEmail</p>
+            </div>
+            <div class="col-md-6">
+                <p><strong>Ngày giờ:</strong> @Model.BookingDate.ToString("dd/MM/yyyy HH:mm")</p>
+                <p><strong>Số lượng khách:</strong> @Model.NumberOfGuests</p>
+                <p><strong>Bàn:</strong> @(Model.Table?.TableNumber ?? "Chưa chọn")</p>
+                <p><strong>Khu vực:</strong> @(Model.Table?.Area?.AreaName ?? "")</p>
+                <p><strong>Trạng thái:</strong> 
+                    <span class="badge @(Model.Status == "Xác nhận" ? "bg-success" : Model.Status == "Hoàn tất" ? "bg-info" : Model.Status == "Hủy" ? "bg-danger" : "bg-warning")">
+                        @Model.Status
+                    </span>
+                </p>
+            </div>
+        </div>
+        @if (!string.IsNullOrEmpty(Model.Notes))
+        {
+            <p><strong>Ghi chú:</strong> @Model.Notes</p>
+        }
+    </div>
+</div>
+
+<div class="mt-3">
+    @if (Model.Status == "Chờ")
+    {
+        <form asp-action="UpdateStatus" method="post" class="d-inline">
+            <input type="hidden" name="id" value="@Model.BookingId">
+            <input type="hidden" name="status" value="Xác nhận">
+            <button type="submit" class="btn btn-success">Xác nhận đặt bàn</button>
+        </form>
+        <form asp-action="UpdateStatus" method="post" class="d-inline">
+            <input type="hidden" name="id" value="@Model.BookingId">
+            <input type="hidden" name="status" value="Hủy">
+            <button type="submit" class="btn btn-danger" onclick="return confirm('Bạn có chắc muốn hủy?')">Hủy đặt bàn</button>
+        </form>
+    }
+    else if (Model.Status == "Xác nhận")
+    {
+        <form asp-action="UpdateStatus" method="post" class="d-inline">
+            <input type="hidden" name="id" value="@Model.BookingId">
+            <input type="hidden" name="status" value="Hoàn tất">
+            <button type="submit" class="btn btn-info">Hoàn tất</button>
+        </form>
+    }
+    <a asp-action="Index" class="btn btn-secondary">Quay lại</a>
+</div>
+

@@ -1,0 +1,190 @@
+@model Web_QLNhaHang.Models.Dish
+@{
+    ViewData["Title"] = "Xóa món ăn";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<style>
+    .delete-container {
+        max-width: 600px;
+        margin: 2rem auto;
+    }
+    .delete-card {
+        background: white;
+        border-radius: 16px;
+        box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+        overflow: hidden;
+    }
+    .delete-header {
+        background: linear-gradient(135deg, #dc3545 0%, #c82333 100%);
+        color: white;
+        padding: 2rem;
+        text-align: center;
+    }
+    .delete-header i {
+        font-size: 3rem;
+        margin-bottom: 1rem;
+        display: block;
+    }
+    .delete-header h3 {
+        margin: 0;
+        font-weight: 700;
+    }
+    .delete-body {
+        padding: 2rem;
+    }
+    .dish-info {
+        display: flex;
+        align-items: center;
+        padding: 1.5rem;
+        background: #f8f9fa;
+        border-radius: 12px;
+        margin-bottom: 1.5rem;
+    }
+    .dish-image {
+        width: 100px;
+        height: 100px;
+        border-radius: 12px;
+        object-fit: cover;
+        margin-right: 1.5rem;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    }
+    .dish-image-placeholder {
+        width: 100px;
+        height: 100px;
+        border-radius: 12px;
+        background: linear-gradient(135deg, #6c757d 0%, #495057 100%);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-right: 1.5rem;
+        color: white;
+        font-size: 2rem;
+    }
+    .dish-details h5 {
+        color: #333;
+        font-weight: 700;
+        margin-bottom: 0.5rem;
+    }
+    .dish-details .category {
+        color: #6c757d;
+        font-size: 0.9rem;
+        margin-bottom: 0.25rem;
+    }
+    .dish-details .price {
+        color: #dc3545;
+        font-weight: 700;
+        font-size: 1.2rem;
+    }
+    .warning-box {
+        background: #fff3cd;
+        border: 1px solid #ffc107;
+        border-radius: 12px;
+        padding: 1rem 1.5rem;
+        margin-bottom: 1.5rem;
+        display: flex;
+        align-items: center;
+    }
+    .warning-box i {
+        color: #856404;
+        font-size: 1.5rem;
+        margin-right: 1rem;
+    }
+    .warning-box span {
+        color: #856404;
+        font-weight: 500;
+    }
+    .action-buttons {
+        display: flex;
+        gap: 1rem;
+    }
+    .btn-delete {
+        flex: 1;
+        background: linear-gradient(135deg, #dc3545 0%, #c82333 100%);
+        border: none;
+        color: white;
+        padding: 0.875rem 1.5rem;
+        border-radius: 50px;
+        font-weight: 600;
+        font-size: 1rem;
+        transition: all 0.3s ease;
+    }
+    .btn-delete:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 25px rgba(220, 53, 69, 0.4);
+        color: white;
+    }
+    .btn-cancel {
+        flex: 1;
+        background: #f8f9fa;
+        border: 2px solid #dee2e6;
+        color: #495057;
+        padding: 0.875rem 1.5rem;
+        border-radius: 50px;
+        font-weight: 600;
+        font-size: 1rem;
+        transition: all 0.3s ease;
+        text-decoration: none;
+        text-align: center;
+    }
+    .btn-cancel:hover {
+        background: #e9ecef;
+        color: #333;
+    }
+</style>
+
+<div class="delete-container">
+    <div class="delete-card">
+        <div class="delete-header">
+            <i class="fas fa-exclamation-triangle"></i>
+            <h3>Xác nhận xóa món ăn</h3>
+        </div>
+        
+        <div class="delete-body">
+            <div class="dish-info">
+                @if (!string.IsNullOrEmpty(Model.ImageUrl))
+                {
+                    <img src="@Model.ImageUrl" alt="@Model.DishName" class="dish-image" />
+                }
+                else
+                {
+                    <div class="dish-image-placeholder">
+                        <i class="fas fa-utensils"></i>
+                    </div>
+                }
+                <div class="dish-details">
+                    <h5>@Model.DishName</h5>
+                    <div class="category">
+                        <i class="fas fa-tag me-1"></i>@(Model.Category?.CategoryName ?? "Không có danh mục")
+                    </div>
+                    <div class="price">@Model.Price.ToString("N0") ₫</div>
+                </div>
+            </div>
+
+            <div class="warning-box">
+                <i class="fas fa-exclamation-circle"></i>
+                <span>Hành động này không thể hoàn tác! Món ăn sẽ bị xóa vĩnh viễn khỏi hệ thống.</span>
+            </div>
+
+            <div class="action-buttons">
+                <a asp-action="Index" class="btn-cancel">
+                    <i class="fas fa-times me-2"></i>Hủy bỏ
+                </a>
+                <form action="/Admin/Dish/Delete/@Model.DishId" method="post" style="flex: 1;" id="deleteForm">
+                    @Html.AntiForgeryToken()
+                    <button type="button" class="btn-delete w-100" onclick="confirmDelete()">
+                        <i class="fas fa-trash-alt me-2"></i>Xác nhận xóa
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    function confirmDelete() {
+        if (confirm('Bạn có chắc chắn muốn xóa món ăn "@Model.DishName"?\n\nHành động này không thể hoàn tác!')) {
+            document.getElementById('deleteForm').submit();
+        }
+    }
+</script>

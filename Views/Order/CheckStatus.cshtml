@@ -1,0 +1,76 @@
+@model List<Web_QLNhaHang.Models.Order>
+@{
+    ViewData["Title"] = "Kiểm tra trạng thái đơn hàng";
+}
+
+<div class="container mt-4">
+    <h1 class="mb-4">Kiểm tra trạng thái đơn hàng</h1>
+
+    <div class="card mb-4">
+        <div class="card-body">
+            <form asp-action="CheckStatus" method="get" class="row">
+                <div class="col-md-8">
+                    <input type="text" name="phone" class="form-control" placeholder="Nhập số điện thoại đã đặt hàng" required>
+                </div>
+                <div class="col-md-4">
+                    <button type="submit" class="btn btn-primary w-100">Kiểm tra</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    @if (Model != null && Model.Any())
+    {
+        <div class="card">
+            <div class="card-header">
+                <h5>Lịch sử đơn hàng</h5>
+            </div>
+            <div class="card-body">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Mã đơn</th>
+                            <th>Ngày đặt</th>
+                            <th>Tổng tiền</th>
+                            <th>Trạng thái</th>
+                            <th>Thanh toán</th>
+                            <th>Thao tác</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var order in Model)
+                        {
+                            <tr>
+                                <td>@order.OrderNumber</td>
+                                <td>@order.OrderDate.ToString("dd/MM/yyyy HH:mm")</td>
+                                <td>@order.TotalAmount.ToString("N0") ₫</td>
+                                <td>
+                                    <span class="badge @(order.Status == "Hoàn thành" ? "bg-success" : order.Status == "Hủy" ? "bg-danger" : "bg-warning")">
+                                        @order.Status
+                                    </span>
+                                </td>
+                                <td>
+                                    <span class="badge @(order.PaymentStatus == "Đã thanh toán" ? "bg-success" : "bg-secondary")">
+                                        @order.PaymentStatus
+                                    </span>
+                                </td>
+                                <td>
+                                    <a asp-action="OrderSuccess" asp-route-orderNumber="@order.OrderNumber" class="btn btn-sm btn-info">
+                                        Xem chi tiết
+                                    </a>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    }
+    else if (ViewContext.HttpContext.Request.Query.ContainsKey("phone"))
+    {
+        <div class="alert alert-info">
+            Không tìm thấy đơn hàng nào với số điện thoại này.
+        </div>
+    }
+</div>
+

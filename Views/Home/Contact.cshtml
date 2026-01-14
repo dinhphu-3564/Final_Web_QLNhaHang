@@ -1,0 +1,132 @@
+@{
+    ViewData["Title"] = "Liên hệ";
+}
+
+<!-- Page Banner -->
+<div class="page-banner-user">
+    <div class="container-user">
+        <h1 class="page-banner-title">Liên hệ với chúng tôi</h1>
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb-user">
+                <li class="breadcrumb-item-user"><a asp-controller="Home" asp-action="Index">Trang chủ</a></li>
+                <li class="breadcrumb-item-user active" aria-current="page">Liên hệ</li>
+            </ol>
+        </nav>
+    </div>
+</div>
+
+<section class="contact-page-section">
+    <div class="container-user">
+        <div class="contact-grid">
+            <!-- Contact Info & Map -->
+            <div class="contact-sidebar">
+                <div class="contact-info-card">
+                    <h3 class="contact-card-title">
+                        <i class="fas fa-info-circle me-2"></i>Thông tin liên hệ
+                    </h3>
+                    
+                    <div class="contact-info-list">
+                        <div class="contact-info-item">
+                            <div class="contact-info-icon">
+                                <i class="fas fa-map-marker-alt"></i>
+                            </div>
+                            <div>
+                                <h6>Địa chỉ chính</h6>
+                                <p>123 Đường ABC, Quận 1, TP. Hồ Chí Minh</p>
+                            </div>
+                        </div>
+                        
+                        <div class="contact-info-item">
+                            <div class="contact-info-icon hotline">
+                                <i class="fas fa-phone-alt"></i>
+                            </div>
+                            <div>
+                                <h6>Hotline đặt bàn</h6>
+                                <p><strong class="hotline-number">1800 2028</strong> (Miễn phí)</p>
+                            </div>
+                        </div>
+                        
+                        <div class="contact-info-item">
+                            <div class="contact-info-icon">
+                                <i class="fas fa-envelope"></i>
+                            </div>
+                            <div>
+                                <h6>Email hỗ trợ</h6>
+                                <p>nhahangviet@gmail.com</p>
+                            </div>
+                        </div>
+                        
+                        <div class="contact-info-item">
+                            <div class="contact-info-icon">
+                                <i class="fas fa-clock"></i>
+                            </div>
+                            <div>
+                                <h6>Giờ mở cửa</h6>
+                                <p>Thứ 2 - Chủ Nhật: 10:30 - 22:00</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Social Links -->
+                    <div class="social-links-contact">
+                        <a href="#" class="social-link-contact facebook"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#" class="social-link-contact instagram"><i class="fab fa-instagram"></i></a>
+                        <a href="#" class="social-link-contact youtube"><i class="fab fa-youtube"></i></a>
+                        <a href="#" class="social-link-contact tiktok"><i class="fab fa-tiktok"></i></a>
+                    </div>
+                </div>
+                
+                <!-- Google Map -->
+                <div class="map-card">
+                    <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3919.4946681007846!2d106.6994193148008!3d10.773374292323579!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x31752f416d66e74b%3A0xe54497e885d9af!2sBitexco%20Financial%20Tower!5e0!3m2!1sen!2s!4v1626252985396!5m2!1sen!2s" 
+                            width="100%" height="250" style="border:0;" allowfullscreen="" loading="lazy"></iframe>
+                </div>
+            </div>
+
+            <!-- Contact Form -->
+            <div class="contact-form-card">
+                <h3 class="contact-card-title">
+                    <i class="fas fa-paper-plane me-2"></i>Gửi tin nhắn
+                </h3>
+                <p class="contact-form-subtitle">Chúng tôi luôn sẵn sàng lắng nghe ý kiến của bạn</p>
+                
+                <form class="contact-form">
+                    <div class="row g-4">
+                        <div class="col-md-6">
+                            <div class="form-group-contact">
+                                <label><i class="fas fa-user me-2"></i>Họ và tên</label>
+                                <input type="text" class="form-input-contact" placeholder="Nhập họ và tên">
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group-contact">
+                                <label><i class="fas fa-envelope me-2"></i>Email</label>
+                                <input type="email" class="form-input-contact" placeholder="Nhập địa chỉ email">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group-contact">
+                        <label><i class="fas fa-phone me-2"></i>Số điện thoại</label>
+                        <input type="text" class="form-input-contact" placeholder="Nhập số điện thoại">
+                    </div>
+                    <div class="form-group-contact">
+                        <label><i class="fas fa-tag me-2"></i>Tiêu đề</label>
+                        <input type="text" class="form-input-contact" placeholder="Nhập tiêu đề tin nhắn">
+                    </div>
+                    <div class="form-group-contact">
+                        <label><i class="fas fa-comment me-2"></i>Nội dung</label>
+                        <textarea class="form-input-contact form-textarea-contact" placeholder="Nhập nội dung tin nhắn..." rows="5"></textarea>
+                    </div>
+                    <button type="button" class="btn-user btn-user-primary btn-user-block btn-user-xl" 
+                            onclick="alert('Cảm ơn bạn đã liên hệ! Chúng tôi sẽ phản hồi sớm nhất.')">
+                        <i class="fas fa-paper-plane me-2"></i>Gửi tin nhắn
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+</section>
+
+@section Styles {
+    <link rel="stylesheet" href="~/css/user-contact.css" asp-append-version="true" />
+}

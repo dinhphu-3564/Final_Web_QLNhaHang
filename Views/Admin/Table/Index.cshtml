@@ -1,0 +1,129 @@
+@model List<Web_QLNhaHang.Models.Table>
+@{
+    ViewData["Title"] = "Quản lý bàn";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<!-- Page Header -->
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <div>
+        <h2 class="page-title mb-2">Quản lý bàn</h2>
+        <p class="page-description mb-0">Quản lý và theo dõi trạng thái bàn trong nhà hàng</p>
+    </div>
+    <a asp-action="Create" class="btn btn-primary">
+        <i class="fas fa-plus me-2"></i>Thêm bàn mới
+    </a>
+</div>
+
+<!-- Filter Pills -->
+<div class="order-status-pills mb-4">
+    <button class="status-pill active" onclick="filterTables('all')">
+        <i class="fas fa-list me-1"></i> Tất cả (@Model.Count)
+    </button>
+    <button class="status-pill" onclick="filterTables('Trống')">
+        <i class="fas fa-check-circle me-1"></i> Trống (@Model.Count(t => t.Status == "Trống"))
+    </button>
+    <button class="status-pill" onclick="filterTables('Đang phục vụ')">
+        <i class="fas fa-utensils me-1"></i> Đang phục vụ (@Model.Count(t => t.Status == "Đang phục vụ"))
+    </button>
+    <button class="status-pill" onclick="filterTables('Đã đặt')">
+        <i class="fas fa-calendar-check me-1"></i> Đã đặt (@Model.Count(t => t.Status == "Đã đặt"))
+    </button>
+</div>
+
+<!-- Table Grid -->
+<div class="table-grid">
+    @foreach (var table in Model)
+    {
+        var statusClass = table.Status == "Trống" ? "available" : 
+                         table.Status == "Đang phục vụ" ? "occupied" : 
+                         table.Status == "Đã đặt" ? "reserved" : "";
+        
+        <div class="table-card @statusClass" data-status="@table.Status">
+            <div class="table-number">Bàn @table.TableNumber</div>
+            
+            <div class="table-info">
+                <i class="fas fa-users"></i>
+                <span>@table.Capacity người</span>
+            </div>
+            
+            @if (!string.IsNullOrEmpty(table.Area?.AreaName))
+            {
+                <div class="table-info">
+                    <i class="fas fa-map-marker-alt"></i>
+                    <span>@table.Area.AreaName</span>
+                </div>
+            }
+            
+            <div class="mt-3">
+                @if (table.Status == "Trống")
+                {
+                    <span class="badge badge-success">
+                        <i class="fas fa-check-circle me-1"></i>Trống
+                    </span>
+                }
+                else if (table.Status == "Đang phục vụ")
+                {
+                    <span class="badge badge-primary">
+                        <i class="fas fa-utensils me-1"></i>Đang phục vụ
+                    </span>
+                }
+                else if (table.Status == "Đã đặt")
+                {
+                    <span class="badge badge-info">
+                        <i class="fas fa-calendar-check me-1"></i>Đã đặt
+                    </span>
+                }
+                else
+                {
+                    <span class="badge badge-secondary">@table.Status</span>
+                }
+            </div>
+            
+            <div class="table-actions">
+                <a asp-action="Edit" asp-route-id="@table.TableId" class="btn btn-sm btn-warning flex-fill">
+                    <i class="fas fa-edit"></i>
+                </a>
+                <button type="button" class="btn btn-sm btn-danger flex-fill" onclick="confirmDelete('Bạn có chắc muốn xóa bàn @table.TableNumber?', '/Admin/Table/Delete?id=@table.TableId')">
+                    <i class="fas fa-trash"></i>
+                </button>
+            </div>
+        </div>
+    }
+</div>
+
+@if (Model.Count == 0)
+{
+    <div class="empty-state">
+        <div class="empty-state-icon">
+            <i class="fas fa-chair"></i>
+        </div>
+        <h3 class="empty-state-title">Chưa có bàn nào</h3>
+        <p class="empty-state-description">Thêm bàn mới để bắt đầu quản lý</p>
+        <a asp-action="Create" class="btn btn-primary">
+            <i class="fas fa-plus me-2"></i>Thêm bàn đầu tiên
+        </a>
+    </div>
+}
+
+@section Scripts {
+    <script>
+        function filterTables(status) {
+            // Update active pill
+            document.querySelectorAll('.status-pill').forEach(pill => {
+                pill.classList.remove('active');
+            });
+            event.target.closest('.status-pill').classList.add('active');
+            
+            // Filter cards
+            const cards = document.querySelectorAll('.table-card');
+            cards.forEach(card => {
+                if (status === 'all' || card.dataset.status === status) {
+                    card.style.display = 'block';
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+        }
+    </script>
+}

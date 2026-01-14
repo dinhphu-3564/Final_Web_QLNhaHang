@@ -1,0 +1,96 @@
+@model Web_QLNhaHang.Models.Order
+@{
+    ViewData["Title"] = "Chi tiết đơn hàng";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<h2>Chi tiết đơn hàng</h2>
+
+<div class="card mb-3">
+    <div class="card-header">
+        <h5>Thông tin đơn hàng</h5>
+    </div>
+    <div class="card-body">
+        <div class="row">
+            <div class="col-md-6">
+                <p><strong>Mã đơn:</strong> @Model.OrderNumber</p>
+                <p><strong>Khách hàng:</strong> @Model.CustomerName</p>
+                <p><strong>SĐT:</strong> @Model.CustomerPhone</p>
+                <p><strong>Email:</strong> @Model.CustomerEmail</p>
+            </div>
+            <div class="col-md-6">
+                <p><strong>Ngày đặt:</strong> @Model.OrderDate.ToString("dd/MM/yyyy HH:mm")</p>
+                <p><strong>Trạng thái:</strong> 
+                    <span class="badge @(Model.Status == "Hoàn thành" ? "bg-success" : Model.Status == "Hủy" ? "bg-danger" : "bg-warning")">
+                        @Model.Status
+                    </span>
+                </p>
+                <p><strong>Thanh toán:</strong> 
+                    <span class="badge @(Model.PaymentStatus == "Đã thanh toán" ? "bg-success" : "bg-secondary")">
+                        @Model.PaymentStatus
+                    </span>
+                </p>
+                <p><strong>Tổng tiền:</strong> <span class="text-danger fw-bold">@Model.TotalAmount.ToString("N0") ₫</span></p>
+            </div>
+        </div>
+        @if (!string.IsNullOrEmpty(Model.Notes))
+        {
+            <p><strong>Ghi chú:</strong> @Model.Notes</p>
+        }
+    </div>
+</div>
+
+<div class="card">
+    <div class="card-header">
+        <h5>Chi tiết món ăn</h5>
+    </div>
+    <div class="card-body">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Món</th>
+                    <th>Số lượng</th>
+                    <th>Giá</th>
+                    <th>Ghi chú</th>
+                    <th>Thành tiền</th>
+                </tr>
+            </thead>
+            <tbody>
+                @if (Model.OrderDetails != null)
+                {
+                    @foreach (var detail in Model.OrderDetails)
+                    {
+                        <tr>
+                            <td>@detail.Dish?.DishName</td>
+                            <td>@detail.Quantity</td>
+                            <td>@detail.UnitPrice.ToString("N0") ₫</td>
+                            <td>@detail.Notes</td>
+                            <td>@detail.SubTotal.ToString("N0") ₫</td>
+                        </tr>
+                    }
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<div class="mt-3">
+    @if (Model.Status != "Hoàn thành" && Model.Status != "Hủy")
+    {
+        <form asp-action="UpdateStatus" method="post" class="d-inline">
+            <input type="hidden" name="id" value="@Model.OrderId">
+            <input type="hidden" name="status" value="Hoàn thành">
+            <button type="submit" class="btn btn-success">Hoàn thành đơn hàng</button>
+        </form>
+    }
+    @if (Model.PaymentStatus == "Chưa thanh toán")
+    {
+        <form asp-action="UpdatePaymentStatus" method="post" class="d-inline">
+            <input type="hidden" name="id" value="@Model.OrderId">
+            <input type="hidden" name="paymentStatus" value="Đã thanh toán">
+            <button type="submit" class="btn btn-primary">Đánh dấu đã thanh toán</button>
+        </form>
+    }
+    <a asp-action="Index" class="btn btn-secondary">Quay lại</a>
+</div>
+

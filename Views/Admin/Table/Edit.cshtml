@@ -1,0 +1,166 @@
+@model Web_QLNhaHang.Models.Table
+@{
+    ViewData["Title"] = "Sửa bàn";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<style>
+    .page-header {
+        background: white;
+        padding: 1.5rem;
+        border-radius: 12px;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+        margin-bottom: 1.5rem;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .page-header h2 {
+        margin: 0;
+        color: #2c3e50;
+        font-weight: 700;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+
+    .form-card {
+        background: white;
+        padding: 2rem;
+        border-radius: 12px;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+        max-width: 600px;
+    }
+
+    .form-label {
+        font-weight: 600;
+        color: #2c3e50;
+        margin-bottom: 0.5rem;
+        display: block;
+    }
+
+    .form-control:focus,
+    .form-select:focus {
+        border-color: #4a7c59;
+        box-shadow: 0 0 0 0.2rem rgba(74, 124, 89, 0.25);
+    }
+
+    .btn-primary-custom,
+    .btn-primary {
+        background: linear-gradient(135deg, #4a7c59 0%, #3d6349 100%);
+        color: white;
+        border: none;
+        padding: 0.7rem 1.5rem;
+        border-radius: 8px;
+        text-decoration: none;
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        transition: all 0.3s;
+        font-weight: 600;
+        margin-right: 0.5rem;
+    }
+
+    .btn-primary:hover,
+    .btn-primary-custom:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(74, 124, 89, 0.3);
+        color: white;
+    }
+
+    .btn-secondary {
+        background: #95a5a6;
+        color: white;
+        border: none;
+        padding: 0.7rem 1.5rem;
+        border-radius: 8px;
+        text-decoration: none;
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        transition: all 0.3s;
+        font-weight: 600;
+    }
+
+    .btn-secondary:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(149, 165, 166, 0.3);
+        color: white;
+    }
+
+    .form-check {
+        display: flex;
+        align-items: center;
+        margin-top: 0.5rem;
+    }
+
+    .form-check-input {
+        width: 1.25rem;
+        height: 1.25rem;
+        margin-right: 0.5rem;
+        cursor: pointer;
+        accent-color: #4a7c59;
+    }
+
+    .form-check-label {
+        cursor: pointer;
+        margin-bottom: 0;
+    }
+</style>
+
+<!-- Page Header -->
+<div class="page-header">
+    <h2><i class="fas fa-edit"></i> Sửa bàn</h2>
+</div>
+
+<!-- Form Card -->
+<div class="form-card">
+    <form asp-controller="Table" asp-action="Edit" asp-route-id="@Model.TableId" method="post">
+        <input type="hidden" asp-for="TableId" />
+        <div class="mb-3">
+            <label asp-for="TableNumber" class="form-label">Số bàn</label>
+            <input asp-for="TableNumber" class="form-control" placeholder="Nhập số bàn (VD: 1, 2, 3...)" required>
+            <span asp-validation-for="TableNumber" class="text-danger"></span>
+        </div>
+        <div class="mb-3">
+            <label asp-for="AreaId" class="form-label">Khu vực</label>
+            <select asp-for="AreaId" asp-items="ViewBag.Areas" class="form-select" required>
+                <option value="">-- Chọn khu vực --</option>
+            </select>
+            <span asp-validation-for="AreaId" class="text-danger"></span>
+        </div>
+        <div class="mb-3">
+            <label asp-for="Capacity" class="form-label">Sức chứa (người)</label>
+            <input asp-for="Capacity" type="number" class="form-control" min="1" placeholder="Nhập số người tối đa" required>
+            <span asp-validation-for="Capacity" class="text-danger"></span>
+        </div>
+        <div class="mb-3">
+            <label asp-for="Status" class="form-label">Trạng thái</label>
+            <select asp-for="Status" class="form-select" required>
+                <option value="Trống">Trống</option>
+                <option value="Đã đặt">Đã đặt</option>
+                <option value="Đang phục vụ">Đang phục vụ</option>
+                <option value="Bảo trì">Bảo trì</option>
+            </select>
+            <small class="text-muted">Trạng thái hiện tại của bàn</small>
+        </div>
+        <div class="mb-3">
+            <div class="form-check">
+                <input asp-for="IsActive" class="form-check-input" type="checkbox" id="isActive">
+                <label asp-for="IsActive" class="form-check-label">Hoạt động</label>
+            </div>
+            <small class="text-muted d-block mt-1">Bàn hoạt động sẽ hiển thị trên hệ thống đặt bàn</small>
+        </div>
+
+        <div class="mt-4">
+            <button type="submit" class="btn btn-primary">
+                <i class="fas fa-save"></i> Cập nhật bàn
+            </button>
+            <a asp-action="Index" class="btn btn-secondary">
+                <i class="fas fa-times"></i> Hủy
+            </a>
+        </div>
+    </form>
+</div>
+

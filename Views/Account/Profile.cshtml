@@ -1,0 +1,252 @@
+@model Web_QLNhaHang.Models.Customer
+@{
+    ViewData["Title"] = "Thông tin tài khoản";
+}
+
+<div class="profile-page">
+    <div class="container-user">
+        <div class="profile-card">
+            <!-- Profile Header -->
+            <div class="profile-header">
+                <div class="profile-avatar">
+                    <i class="fas fa-user"></i>
+                </div>
+                <h2 class="profile-name">@Model.FullName</h2>
+                <p class="profile-email">
+                    <i class="fas fa-envelope me-2"></i>@(Model.Email ?? "Chưa cập nhật email")
+                </p>
+                <div class="profile-member-badge">
+                    <i class="fas fa-crown me-2"></i>Thành viên
+                </div>
+            </div>
+
+            <!-- Profile Body -->
+            <div class="profile-body">
+                <!-- Stats Grid -->
+                <div class="stats-grid">
+                    <div class="stat-card-profile">
+                        <div class="stat-icon-profile">
+                            <i class="fas fa-star"></i>
+                        </div>
+                        <div class="stat-content">
+                            <div class="stat-value-profile">@Model.LoyaltyPoints</div>
+                            <div class="stat-label-profile">Điểm tích lũy</div>
+                        </div>
+                    </div>
+                    <div class="stat-card-profile">
+                        <div class="stat-icon-profile orders">
+                            <i class="fas fa-shopping-bag"></i>
+                        </div>
+                        <div class="stat-content">
+                            <div class="stat-value-profile">@(Model.Orders?.Count ?? 0)</div>
+                            <div class="stat-label-profile">Đơn hàng</div>
+                        </div>
+                    </div>
+                    <div class="stat-card-profile">
+                        <div class="stat-icon-profile bookings">
+                            <i class="fas fa-calendar-check"></i>
+                        </div>
+                        <div class="stat-content">
+                            <div class="stat-value-profile">@(Model.Bookings?.Count ?? 0)</div>
+                            <div class="stat-label-profile">Lượt đặt bàn</div>
+                        </div>
+                    </div>
+                    <div class="stat-card-profile">
+                        <div class="stat-icon-profile days">
+                            <i class="fas fa-clock"></i>
+                        </div>
+                        <div class="stat-content">
+                            <div class="stat-value-profile">@((DateTime.Now - Model.CreatedDate).Days)</div>
+                            <div class="stat-label-profile">Ngày là thành viên</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Personal Info Section -->
+                <div class="info-section-profile">
+                    <h5 class="section-title-profile">
+                        <i class="fas fa-user-circle me-2"></i>Thông tin cá nhân
+                    </h5>
+                    <div class="info-grid">
+                        <div class="info-item-profile">
+                            <div class="info-icon-profile">
+                                <i class="fas fa-user"></i>
+                            </div>
+                            <div class="info-content">
+                                <span class="info-label-profile">Họ và tên</span>
+                                <span class="info-value-profile">@Model.FullName</span>
+                            </div>
+                        </div>
+                        <div class="info-item-profile">
+                            <div class="info-icon-profile">
+                                <i class="fas fa-phone"></i>
+                            </div>
+                            <div class="info-content">
+                                <span class="info-label-profile">Số điện thoại</span>
+                                <span class="info-value-profile">@(Model.PhoneNumber ?? "Chưa cập nhật")</span>
+                            </div>
+                        </div>
+                        <div class="info-item-profile">
+                            <div class="info-icon-profile">
+                                <i class="fas fa-envelope"></i>
+                            </div>
+                            <div class="info-content">
+                                <span class="info-label-profile">Email</span>
+                                <span class="info-value-profile">@(Model.Email ?? "Chưa cập nhật")</span>
+                            </div>
+                        </div>
+                        <div class="info-item-profile">
+                            <div class="info-icon-profile">
+                                <i class="fas fa-map-marker-alt"></i>
+                            </div>
+                            <div class="info-content">
+                                <span class="info-label-profile">Địa chỉ</span>
+                                <span class="info-value-profile">@(Model.Address ?? "Chưa cập nhật")</span>
+                            </div>
+                        </div>
+                        <div class="info-item-profile">
+                            <div class="info-icon-profile">
+                                <i class="fas fa-calendar-alt"></i>
+                            </div>
+                            <div class="info-content">
+                                <span class="info-label-profile">Ngày đăng ký</span>
+                                <span class="info-value-profile">@Model.CreatedDate.ToString("dd/MM/yyyy")</span>
+                            </div>
+                        </div>
+                        <div class="info-item-profile">
+                            <div class="info-icon-profile">
+                                <i class="fas fa-id-card"></i>
+                            </div>
+                            <div class="info-content">
+                                <span class="info-label-profile">Tên đăng nhập</span>
+                                <span class="info-value-profile">@(Model.Username ?? Model.PhoneNumber ?? Model.Email)</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Order History -->
+                @if (Model.Orders != null && Model.Orders.Any())
+                {
+                    <div class="info-section-profile">
+                        <div class="section-header-profile">
+                            <h5 class="section-title-profile">
+                                <i class="fas fa-shopping-bag me-2"></i>Lịch sử đơn hàng gần đây
+                            </h5>
+                            <a asp-controller="Order" asp-action="MyOrders" class="view-all-link">
+                                Xem tất cả <i class="fas fa-arrow-right ms-1"></i>
+                            </a>
+                        </div>
+                        <div class="table-responsive-profile">
+                            <table class="table-profile">
+                                <thead>
+                                    <tr>
+                                        <th>Mã đơn</th>
+                                        <th>Ngày đặt</th>
+                                        <th>Tổng tiền</th>
+                                        <th>Trạng thái</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var order in Model.Orders.OrderByDescending(o => o.OrderDate).Take(5))
+                                    {
+                                        <tr>
+                                            <td><strong>#@order.OrderId</strong></td>
+                                            <td>@order.OrderDate.ToString("dd/MM/yyyy HH:mm")</td>
+                                            <td class="price-cell">@order.TotalAmount.ToString("N0")đ</td>
+                                            <td>
+                                                @{
+                                                    var statusClass = order.Status switch
+                                                    {
+                                                        "Completed" => "badge-success-profile",
+                                                        "Pending" => "badge-warning-profile",
+                                                        "Cancelled" => "badge-danger-profile",
+                                                        _ => "badge-info-profile"
+                                                    };
+                                                    var statusText = order.Status switch
+                                                    {
+                                                        "Completed" => "Hoàn thành",
+                                                        "Pending" => "Chờ xử lý",
+                                                        "Cancelled" => "Đã hủy",
+                                                        "Processing" => "Đang xử lý",
+                                                        _ => order.Status
+                                                    };
+                                                }
+                                                <span class="badge-profile @statusClass">@statusText</span>
+                                            </td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                }
+
+                <!-- Booking History -->
+                @if (Model.Bookings != null && Model.Bookings.Any())
+                {
+                    <div class="info-section-profile">
+                        <h5 class="section-title-profile">
+                            <i class="fas fa-calendar-check me-2"></i>Lịch sử đặt bàn gần đây
+                        </h5>
+                        <div class="table-responsive-profile">
+                            <table class="table-profile">
+                                <thead>
+                                    <tr>
+                                        <th>Mã đặt bàn</th>
+                                        <th>Ngày đặt</th>
+                                        <th>Số khách</th>
+                                        <th>Trạng thái</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var booking in Model.Bookings.OrderByDescending(b => b.BookingDate).Take(5))
+                                    {
+                                        <tr>
+                                            <td><strong>#@booking.BookingId</strong></td>
+                                            <td>@booking.BookingDate.ToString("dd/MM/yyyy HH:mm")</td>
+                                            <td>@booking.NumberOfGuests người</td>
+                                            <td>
+                                                @{
+                                                    var bookingStatusClass = booking.Status switch
+                                                    {
+                                                        "Confirmed" => "badge-success-profile",
+                                                        "Pending" => "badge-warning-profile",
+                                                        "Cancelled" => "badge-danger-profile",
+                                                        _ => "badge-info-profile"
+                                                    };
+                                                    var bookingStatusText = booking.Status switch
+                                                    {
+                                                        "Confirmed" => "Đã xác nhận",
+                                                        "Pending" => "Chờ xác nhận",
+                                                        "Cancelled" => "Đã hủy",
+                                                        _ => booking.Status
+                                                    };
+                                                }
+                                                <span class="badge-profile @bookingStatusClass">@bookingStatusText</span>
+                                            </td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                }
+
+                <!-- Action Buttons -->
+                <div class="profile-actions">
+                    <a href="@Url.Action("Index", "Home")" class="btn-user btn-user-secondary">
+                        <i class="fas fa-home me-2"></i>Về trang chủ
+                    </a>
+                    <a href="@Url.Action("Logout", "Account")" class="btn-user btn-user-primary">
+                        <i class="fas fa-sign-out-alt me-2"></i>Đăng xuất
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Styles {
+    <link rel="stylesheet" href="~/css/user-profile.css" asp-append-version="true" />
+}

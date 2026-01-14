@@ -1,0 +1,42 @@
+@model List<Web_QLNhaHang.Models.BlogPost>
+@{
+    ViewData["Title"] = "Tin tức ẩm thực";
+}
+
+<!-- Page Banner -->
+<div class="page-banner">
+    <div class="container">
+        <h1>Tin tức & Sự kiện</h1>
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a asp-controller="Home" asp-action="Index">Trang chủ</a></li>
+                <li class="breadcrumb-item active" aria-current="page">Blog ẩm thực</li>
+            </ol>
+        </nav>
+    </div>
+</div>
+
+<div class="container mb-5">
+    <div class="blog-grid">
+        @foreach (var post in Model)
+        {
+            <div class="blog-card">
+                <div class="blog-img">
+                    <a asp-action="Details" asp-route-id="@post.Id">
+                        <img src="@post.ImageUrl" alt="@post.Title">
+                    </a>
+                </div>
+                <div class="blog-content">
+                    <span class="blog-date"><i class="far fa-calendar-alt me-2"></i>@post.PublishedDate.ToString("dd/MM/yyyy")</span>
+                    <h3 class="blog-title">
+                        <a asp-action="Details" asp-route-id="@post.Id">@post.Title</a>
+                    </h3>
+                    <p class="blog-excerpt">@post.Summary</p>
+                    <a asp-action="Details" asp-route-id="@post.Id" class="read-more">
+                        Xem chi tiết <i class="fas fa-arrow-right"></i>
+                    </a>
+                </div>
+            </div>
+        }
+    </div>
+</div>

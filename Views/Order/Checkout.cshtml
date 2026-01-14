@@ -1,0 +1,585 @@
+@model Web_QLNhaHang.Models.Order
+@{
+    ViewData["Title"] = "Thanh toán";
+    var cart = ViewBag.Cart as List<Web_QLNhaHang.Models.CartItem>;
+    var total = (decimal)ViewBag.Total;
+}
+
+<!-- Page Banner -->
+<div class="page-banner" style="padding: var(--space-8) 0;">
+    <div class="container">
+        <h1><i class="fas fa-credit-card me-3"></i>Thanh toán</h1>
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb mb-0">
+                <li class="breadcrumb-item"><a asp-controller="Home" asp-action="Index">Trang chủ</a></li>
+                <li class="breadcrumb-item"><a asp-controller="Cart" asp-action="Index">Giỏ hàng</a></li>
+                <li class="breadcrumb-item active" aria-current="page">Thanh toán</li>
+            </ol>
+        </nav>
+    </div>
+</div>
+
+<section class="checkout-section">
+    <div class="container">
+        <form asp-action="PlaceOrder" method="post">
+            <div class="row">
+                <!-- Customer & Payment Info -->
+                <div class="col-lg-7 mb-4">
+                    <!-- Customer Information -->
+                    <div class="checkout-card mb-4">
+                        <div class="card-header-custom">
+                            <div class="step-number">1</div>
+                            <div>
+                                <h5>Thông tin giao hàng</h5>
+                                <p>Vui lòng điền đầy đủ thông tin</p>
+                            </div>
+                        </div>
+                        
+                        <div class="card-body-custom">
+                            <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+                            
+                            <div class="row g-4">
+                                <div class="col-md-6">
+                                    <div class="form-group-custom">
+                                        <label class="form-label-custom">
+                                            <i class="fas fa-user me-2"></i>Họ tên <span class="required">*</span>
+                                        </label>
+                                        <input asp-for="CustomerName" class="form-input-custom" placeholder="Nhập họ tên đầy đủ" value="@ViewBag.CustomerName" required>
+                                        <span asp-validation-for="CustomerName" class="text-danger small"></span>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group-custom">
+                                        <label class="form-label-custom">
+                                            <i class="fas fa-phone me-2"></i>Số điện thoại <span class="required">*</span>
+                                        </label>
+                                        <input asp-for="CustomerPhone" class="form-input-custom" placeholder="Nhập số điện thoại" value="@ViewBag.CustomerPhone" required>
+                                        <span asp-validation-for="CustomerPhone" class="text-danger small"></span>
+                                    </div>
+                                </div>
+                                <div class="col-12">
+                                    <div class="form-group-custom">
+                                        <label class="form-label-custom">
+                                            <i class="fas fa-envelope me-2"></i>Email
+                                        </label>
+                                        <input asp-for="CustomerEmail" type="email" class="form-input-custom" placeholder="Nhập email (không bắt buộc)" value="@ViewBag.CustomerEmail">
+                                    </div>
+                                </div>
+                                <div class="col-12">
+                                    <div class="form-group-custom">
+                                        <label class="form-label-custom">
+                                            <i class="fas fa-map-marker-alt me-2"></i>Địa chỉ giao hàng <span class="required">*</span>
+                                        </label>
+                                        <textarea asp-for="CustomerAddress" class="form-input-custom" rows="3" placeholder="Số nhà, đường, phường/xã, quận/huyện, TP" required></textarea>
+                                        <span asp-validation-for="CustomerAddress" class="text-danger small"></span>
+                                    </div>
+                                </div>
+                                <div class="col-12">
+                                    <div class="form-group-custom">
+                                        <label class="form-label-custom">
+                                            <i class="fas fa-sticky-note me-2"></i>Ghi chú đơn hàng
+                                        </label>
+                                        <textarea asp-for="Notes" class="form-input-custom" rows="2" placeholder="Ghi chú thêm: thời gian giao hàng mong muốn..."></textarea>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Payment Method -->
+                    <div class="checkout-card">
+                        <div class="card-header-custom">
+                            <div class="step-number">2</div>
+                            <div>
+                                <h5>Phương thức thanh toán</h5>
+                                <p>Chọn hình thức thanh toán phù hợp</p>
+                            </div>
+                        </div>
+                        
+                        <div class="card-body-custom">
+                            <div class="payment-options">
+                                <label class="payment-option active">
+                                    <input type="radio" name="paymentMethod" value="COD" checked>
+                                    <div class="payment-icon cod">
+                                        <i class="fas fa-money-bill-wave"></i>
+                                    </div>
+                                    <div class="payment-content">
+                                        <strong>Thanh toán khi nhận hàng (COD)</strong>
+                                        <span>Thanh toán bằng tiền mặt khi nhận hàng</span>
+                                    </div>
+                                    <div class="payment-check">
+                                        <i class="fas fa-check-circle"></i>
+                                    </div>
+                                </label>
+
+                                <label class="payment-option">
+                                    <input type="radio" name="paymentMethod" value="VNPay">
+                                    <div class="payment-icon vnpay">
+                                        <i class="fas fa-university"></i>
+                                    </div>
+                                    <div class="payment-content">
+                                        <strong>VNPay <img src="https://sandbox.vnpayment.vn/paymentv2/images/icons/vi.png" alt="VNPay" class="payment-logo"></strong>
+                                        <span>ATM, Internet Banking, Visa, Master</span>
+                                    </div>
+                                    <div class="payment-check">
+                                        <i class="fas fa-check-circle"></i>
+                                    </div>
+                                </label>
+
+                                <label class="payment-option">
+                                    <input type="radio" name="paymentMethod" value="MoMo">
+                                    <div class="payment-icon momo">
+                                        <i class="fas fa-wallet"></i>
+                                    </div>
+                                    <div class="payment-content">
+                                        <strong>Ví MoMo <img src="https://upload.wikimedia.org/wikipedia/vi/f/fe/MoMo_Logo.png" alt="MoMo" class="payment-logo"></strong>
+                                        <span>Thanh toán nhanh bằng ví điện tử</span>
+                                    </div>
+                                    <div class="payment-check">
+                                        <i class="fas fa-check-circle"></i>
+                                    </div>
+                                </label>
+
+                                <label class="payment-option">
+                                    <input type="radio" name="paymentMethod" value="MoMoATM">
+                                    <div class="payment-icon momo-atm">
+                                        <i class="fas fa-credit-card"></i>
+                                    </div>
+                                    <div class="payment-content">
+                                        <strong>MoMo - Thẻ ATM <img src="https://upload.wikimedia.org/wikipedia/vi/f/fe/MoMo_Logo.png" alt="MoMo" class="payment-logo"></strong>
+                                        <span>Thanh toán bằng thẻ ATM/Napas qua MoMo</span>
+                                    </div>
+                                    <div class="payment-check">
+                                        <i class="fas fa-check-circle"></i>
+                                    </div>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Order Summary -->
+                <div class="col-lg-5">
+                    <div class="order-summary-card">
+                        <div class="summary-header">
+                            <h5><i class="fas fa-shopping-bag me-2"></i>Đơn hàng của bạn</h5>
+                        </div>
+                        
+                        <div class="summary-items">
+                            @if (cart != null && cart.Any())
+                            {
+                                @foreach (var item in cart)
+                                {
+                                    <div class="summary-item">
+                                        <div class="item-image-mini">
+                                            @if (!string.IsNullOrEmpty(item.ImageUrl))
+                                            {
+                                                <img src="@item.ImageUrl" alt="@item.DishName">
+                                            }
+                                            else
+                                            {
+                                                <i class="fas fa-utensils"></i>
+                                            }
+                                        </div>
+                                        <div class="item-info-mini">
+                                            <h6>@item.DishName</h6>
+                                            <span>x @item.Quantity</span>
+                                        </div>
+                                        <div class="item-price-mini">
+                                            @item.SubTotal.ToString("N0") ₫
+                                        </div>
+                                    </div>
+                                }
+                            }
+                        </div>
+                        
+                        <div class="summary-totals">
+                            <div class="total-row">
+                                <span>Tạm tính</span>
+                                <strong>@total.ToString("N0") ₫</strong>
+                            </div>
+                            <div class="total-row">
+                                <span>Phí giao hàng</span>
+                                <strong class="free">Miễn phí</strong>
+                            </div>
+                            <div class="total-row final">
+                                <span>Tổng cộng</span>
+                                <strong>@total.ToString("N0") ₫</strong>
+                            </div>
+                        </div>
+                        
+                        <button type="submit" class="btn-place-order">
+                            <i class="fas fa-check-circle me-2"></i>
+                            Xác nhận đặt hàng
+                        </button>
+                        
+                        <div class="order-security">
+                            <i class="fas fa-shield-alt"></i>
+                            <span>Thông tin của bạn được bảo mật an toàn</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</section>
+
+<style>
+    .checkout-section {
+        background: var(--bg-light);
+        padding: var(--space-8) 0 var(--space-16);
+    }
+
+    .checkout-card {
+        background: white;
+        border-radius: var(--radius-2xl);
+        box-shadow: var(--shadow-lg);
+        overflow: hidden;
+    }
+
+    .card-header-custom {
+        display: flex;
+        align-items: center;
+        gap: var(--space-4);
+        padding: var(--space-5) var(--space-6);
+        background: var(--bg-section);
+        border-bottom: 1px solid var(--border-light);
+    }
+
+    .step-number {
+        width: 48px;
+        height: 48px;
+        background: var(--gradient-primary);
+        color: white;
+        border-radius: var(--radius-full);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: var(--text-xl);
+        font-weight: var(--font-bold);
+        flex-shrink: 0;
+    }
+
+    .card-header-custom h5 {
+        margin: 0;
+        font-size: var(--text-lg);
+        font-weight: var(--font-semibold);
+        color: var(--text-primary);
+    }
+
+    .card-header-custom p {
+        margin: 0;
+        font-size: var(--text-sm);
+        color: var(--text-muted);
+    }
+
+    .card-body-custom {
+        padding: var(--space-6);
+    }
+
+    .form-group-custom {
+        margin-bottom: 0;
+    }
+
+    .form-label-custom {
+        display: block;
+        font-size: var(--text-sm);
+        font-weight: var(--font-medium);
+        color: var(--text-primary);
+        margin-bottom: var(--space-2);
+    }
+
+    .form-label-custom .required {
+        color: var(--danger);
+    }
+
+    .form-input-custom {
+        width: 100%;
+        padding: var(--space-3) var(--space-4);
+        border: 2px solid var(--border-light);
+        border-radius: var(--radius-lg);
+        font-size: var(--text-base);
+        transition: all var(--transition-fast);
+        outline: none;
+    }
+
+    .form-input-custom:focus {
+        border-color: var(--primary);
+        box-shadow: 0 0 0 3px var(--primary-alpha-10);
+    }
+
+    /* Payment Options */
+    .payment-options {
+        display: flex;
+        flex-direction: column;
+        gap: var(--space-3);
+    }
+
+    .payment-option {
+        display: flex;
+        align-items: center;
+        gap: var(--space-4);
+        padding: var(--space-4);
+        border: 2px solid var(--border-light);
+        border-radius: var(--radius-xl);
+        cursor: pointer;
+        transition: all var(--transition-fast);
+        position: relative;
+    }
+
+    .payment-option:hover {
+        border-color: var(--primary);
+        background: var(--primary-alpha-10);
+    }
+
+    .payment-option.active {
+        border-color: var(--primary);
+        background: linear-gradient(135deg, var(--primary-alpha-10) 0%, var(--bg-light) 100%);
+    }
+
+    .payment-option input[type="radio"] {
+        display: none;
+    }
+
+    .payment-icon {
+        width: 56px;
+        height: 56px;
+        border-radius: var(--radius-lg);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.5rem;
+        color: white;
+        flex-shrink: 0;
+    }
+
+    .payment-icon.cod { background: var(--gradient-accent); }
+    .payment-icon.vnpay { background: linear-gradient(135deg, #0066cc 0%, #004999 100%); }
+    .payment-icon.momo { background: linear-gradient(135deg, #a50064 0%, #d82d8b 100%); }
+    .payment-icon.momo-atm { background: linear-gradient(135deg, #d82d8b 0%, #a50064 100%); }
+
+    .payment-content {
+        flex: 1;
+    }
+
+    .payment-content strong {
+        display: flex;
+        align-items: center;
+        gap: var(--space-2);
+        color: var(--text-primary);
+        font-size: var(--text-base);
+        margin-bottom: var(--space-1);
+    }
+
+    .payment-content span {
+        font-size: var(--text-sm);
+        color: var(--text-muted);
+    }
+
+    .payment-logo {
+        height: 20px;
+    }
+
+    .payment-check {
+        color: var(--border);
+        font-size: var(--text-xl);
+        transition: color var(--transition-fast);
+    }
+
+    .payment-option.active .payment-check {
+        color: var(--primary);
+    }
+
+    /* Order Summary */
+    .order-summary-card {
+        background: white;
+        border-radius: var(--radius-2xl);
+        box-shadow: var(--shadow-lg);
+        overflow: hidden;
+        position: sticky;
+        top: 100px;
+    }
+
+    .summary-header {
+        background: var(--gradient-secondary);
+        color: white;
+        padding: var(--space-4) var(--space-6);
+    }
+
+    .summary-header h5 {
+        margin: 0;
+        font-weight: var(--font-semibold);
+    }
+
+    .summary-items {
+        padding: var(--space-4) var(--space-6);
+        max-height: 300px;
+        overflow-y: auto;
+    }
+
+    .summary-item {
+        display: flex;
+        align-items: center;
+        gap: var(--space-3);
+        padding: var(--space-3) 0;
+        border-bottom: 1px solid var(--border-light);
+    }
+
+    .summary-item:last-child {
+        border-bottom: none;
+    }
+
+    .item-image-mini {
+        width: 50px;
+        height: 50px;
+        border-radius: var(--radius-md);
+        overflow: hidden;
+        background: var(--bg-light);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
+    }
+
+    .item-image-mini img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+
+    .item-image-mini i {
+        color: var(--text-light);
+    }
+
+    .item-info-mini {
+        flex: 1;
+    }
+
+    .item-info-mini h6 {
+        font-size: var(--text-sm);
+        font-weight: var(--font-medium);
+        color: var(--text-primary);
+        margin: 0 0 var(--space-1);
+    }
+
+    .item-info-mini span {
+        font-size: var(--text-xs);
+        color: var(--text-muted);
+    }
+
+    .item-price-mini {
+        font-size: var(--text-sm);
+        font-weight: var(--font-semibold);
+        color: var(--secondary);
+    }
+
+    .summary-totals {
+        padding: var(--space-4) var(--space-6);
+        background: var(--bg-section);
+    }
+
+    .total-row {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: var(--space-2) 0;
+    }
+
+    .total-row span {
+        color: var(--text-secondary);
+    }
+
+    .total-row strong {
+        color: var(--text-primary);
+    }
+
+    .total-row .free {
+        color: var(--success);
+    }
+
+    .total-row.final {
+        padding-top: var(--space-4);
+        margin-top: var(--space-3);
+        border-top: 2px solid var(--secondary);
+    }
+
+    .total-row.final span {
+        font-size: var(--text-lg);
+        font-weight: var(--font-semibold);
+        color: var(--text-primary);
+    }
+
+    .total-row.final strong {
+        font-size: var(--text-2xl);
+        color: var(--primary);
+    }
+
+    .btn-place-order {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: calc(100% - var(--space-12));
+        margin: var(--space-4) var(--space-6);
+        padding: var(--space-4);
+        background: var(--gradient-success);
+        color: white;
+        border: none;
+        border-radius: var(--radius-full);
+        font-size: var(--text-lg);
+        font-weight: var(--font-semibold);
+        cursor: pointer;
+        transition: all var(--transition-base);
+    }
+
+    .btn-place-order:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 10px 30px rgba(56, 161, 105, 0.3);
+    }
+
+    .order-security {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: var(--space-2);
+        padding: var(--space-4) var(--space-6);
+        background: var(--bg-section);
+        color: var(--text-muted);
+        font-size: var(--text-sm);
+    }
+
+    .order-security i {
+        color: var(--success);
+    }
+
+    @@media (max-width: 991px) {
+        .order-summary-card {
+            position: static;
+        }
+    }
+
+    @@media (max-width: 576px) {
+        .payment-option {
+            flex-wrap: wrap;
+        }
+
+        .payment-content strong {
+            flex-wrap: wrap;
+        }
+    }
+</style>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    <script>
+        // Payment option selection
+        document.querySelectorAll('.payment-option').forEach(function(option) {
+            option.addEventListener('click', function() {
+                document.querySelectorAll('.payment-option').forEach(function(opt) {
+                    opt.classList.remove('active');
+                });
+                this.classList.add('active');
+                this.querySelector('input[type="radio"]').checked = true;
+            });
+        });
+    </script>
+}

@@ -1,0 +1,76 @@
+@model List<Web_QLNhaHang.Models.Category>
+@{
+    ViewData["Title"] = "Quản lý danh mục";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<!-- Page Header -->
+<div class="page-header">
+    <h2><i class="fas fa-list-alt"></i> Quản lý danh mục</h2>
+    <a asp-action="Create" class="btn-add">
+        <i class="fas fa-plus-circle"></i> Thêm danh mục
+    </a>
+</div>
+
+<!-- Data Table -->
+<div class="data-table">
+    @if (Model != null && Model.Any())
+    {
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Tên danh mục</th>
+                    <th>Mô tả</th>
+                    <th style="width: 100px;">Thứ tự</th>
+                    <th style="width: 150px;">Trạng thái</th>
+                    <th style="width: 150px;">Thao tác</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var category in Model)
+                {
+                    <tr>
+                        <td class="item-name">@category.CategoryName</td>
+                        <td>@category.Description</td>
+                        <td>@category.DisplayOrder</td>
+                        <td>
+                            @if (category.IsActive)
+                            {
+                                <span class="badge bg-success">
+                                    <i class="fas fa-check-circle"></i> Hoạt động
+                                </span>
+                            }
+                            else
+                            {
+                                <span class="badge bg-danger">
+                                    <i class="fas fa-times-circle"></i> Không hoạt động
+                                </span>
+                            }
+                        </td>
+                        <td>
+                            <a asp-action="Edit" asp-route-id="@category.CategoryId" class="btn btn-action btn-edit" title="Sửa">
+                                <i class="fas fa-edit"></i>
+                            </a>
+                            <form asp-action="Delete" method="post" class="d-inline">
+                                <input type="hidden" name="id" value="@category.CategoryId">
+                                <button type="submit" class="btn btn-action btn-delete" onclick="return confirm('Bạn có chắc muốn xóa?')" title="Xóa">
+                                    <i class="fas fa-trash-alt"></i>
+                                </button>
+                            </form>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+    else
+    {
+        <div class="empty-state">
+            <i class="fas fa-inbox"></i>
+            <p>Không có danh mục nào</p>
+            <a asp-action="Create" class="btn-add">
+                <i class="fas fa-plus-circle"></i> Thêm danh mục
+            </a>
+        </div>
+    }
+</div>

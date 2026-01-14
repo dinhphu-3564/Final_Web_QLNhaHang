@@ -1,0 +1,219 @@
+@model List<Web_QLNhaHang.Models.Dish>
+@{
+    ViewData["Title"] = "Quản lý thực đơn";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<!-- Page Header -->
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <div>
+        <h2 class="page-title mb-2">Quản lý thực đơn</h2>
+        <p class="page-description mb-0">Quản lý các món ăn và danh mục</p>
+    </div>
+    <div class="d-flex gap-3">
+        <div class="view-toggle">
+            <button class="view-toggle-btn active" onclick="switchView('grid')">
+                <i class="fas fa-th"></i>
+            </button>
+            <button class="view-toggle-btn" onclick="switchView('list')">
+                <i class="fas fa-list"></i>
+            </button>
+        </div>
+        <a asp-action="Create" class="btn btn-primary">
+            <i class="fas fa-plus me-2"></i>Thêm món mới
+        </a>
+    </div>
+</div>
+
+<!-- Filters -->
+<div class="card mb-4">
+    <div class="card-body">
+        <form asp-action="Index" method="get" class="row g-3">
+            <div class="col-md-4">
+                <label class="form-label"><i class="fas fa-list-alt me-1"></i>Danh mục</label>
+                <select name="categoryId" class="form-select" asp-items="ViewBag.Categories">
+                    <option value="">Tất cả danh mục</option>
+                </select>
+            </div>
+            <div class="col-md-5">
+                <label class="form-label"><i class="fas fa-search me-1"></i>Tìm kiếm</label>
+                <input type="text" name="searchTerm" class="form-control" placeholder="Nhập tên món..." value="@ViewBag.SearchTerm">
+            </div>
+            <div class="col-md-3 d-flex align-items-end">
+                <button type="submit" class="btn btn-secondary w-100">
+                    <i class="fas fa-filter me-1"></i> Lọc
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+
+@if (Model != null && Model.Any())
+{
+    <!-- Grid View -->
+    <div class="dish-grid" id="dishGrid">
+        @foreach (var dish in Model)
+        {
+            <div class="dish-card">
+                @if (!string.IsNullOrEmpty(dish.ImageUrl))
+                {
+                    <img src="@dish.ImageUrl" alt="@dish.DishName" class="dish-image">
+                }
+                else
+                {
+                    <div class="dish-image-placeholder">
+                        <i class="fas fa-utensils"></i>
+                    </div>
+                }
+                
+                <div class="dish-content">
+                    <div class="dish-header">
+                        <h5 class="dish-name">@dish.DishName</h5>
+                        <div class="dish-price">@dish.Price.ToString("N0")₫</div>
+                    </div>
+                    
+                    <div class="dish-meta">
+                        <span class="badge badge-secondary">
+                            <i class="fas fa-tag me-1"></i>@dish.Category?.CategoryName
+                        </span>
+                        
+                        @if (dish.IsAvailable)
+                        {
+                            <span class="badge badge-success">
+                                <i class="fas fa-check-circle me-1"></i>Còn món
+                            </span>
+                        }
+                        else
+                        {
+                            <span class="badge badge-danger">
+                                <i class="fas fa-times-circle me-1"></i>Hết món
+                            </span>
+                        }
+                        
+                        @if (dish.IsFeatured)
+                        {
+                            <span class="badge badge-warning">
+                                <i class="fas fa-star me-1"></i>Nổi bật
+                            </span>
+                        }
+                    </div>
+                    
+                    <div class="dish-actions">
+                        <a asp-action="Edit" asp-route-id="@dish.DishId" class="btn btn-sm btn-warning flex-fill">
+                            <i class="fas fa-edit"></i> Sửa
+                        </a>
+                        <button type="button" class="btn btn-sm btn-danger flex-fill" onclick="confirmDelete('Bạn có chắc muốn xóa món @dish.DishName?', '/Admin/Dish/Delete?id=@dish.DishId')">
+                            <i class="fas fa-trash"></i> Xóa
+                        </button>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+
+    <!-- List View (Hidden by default) -->
+    <div class="card" id="dishList" style="display: none;">
+        <div class="card-body p-0">
+            <div class="table-responsive">
+                <table class="table mb-0">
+                    <thead>
+                        <tr>
+                            <th style="width: 100px;">Hình ảnh</th>
+                            <th>Tên món</th>
+                            <th>Danh mục</th>
+                            <th style="width: 150px;">Giá</th>
+                            <th style="width: 120px;">Trạng thái</th>
+                            <th style="width: 150px;">Thao tác</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var dish in Model)
+                        {
+                            <tr>
+                                <td>
+                                    @if (!string.IsNullOrEmpty(dish.ImageUrl))
+                                    {
+                                        <img src="@dish.ImageUrl" alt="@dish.DishName" style="width: 70px; height: 70px; object-fit: cover; border-radius: 8px;">
+                                    }
+                                    else
+                                    {
+                                        <div class="d-flex align-items-center justify-content-center" style="width: 70px; height: 70px; background: #ecf0f1; border-radius: 8px;">
+                                            <i class="fas fa-utensils text-muted"></i>
+                                        </div>
+                                    }
+                                </td>
+                                <td>
+                                    <div class="font-semibold">@dish.DishName</div>
+                                    @if (dish.IsFeatured)
+                                    {
+                                        <small class="text-warning"><i class="fas fa-star"></i> Món nổi bật</small>
+                                    }
+                                </td>
+                                <td>@dish.Category?.CategoryName</td>
+                                <td class="font-bold text-primary">@dish.Price.ToString("N0")₫</td>
+                                <td>
+                                    @if (dish.IsAvailable)
+                                    {
+                                        <span class="badge badge-success">
+                                            <i class="fas fa-check-circle"></i> Còn món
+                                        </span>
+                                    }
+                                    else
+                                    {
+                                        <span class="badge badge-danger">
+                                            <i class="fas fa-times-circle"></i> Hết món
+                                        </span>
+                                    }
+                                </td>
+                                <td>
+                                    <div class="table-actions">
+                                        <a asp-action="Edit" asp-route-id="@dish.DishId" class="btn btn-sm btn-warning">
+                                            <i class="fas fa-edit"></i>
+                                        </a>
+                                        <button type="button" class="btn btn-sm btn-danger" onclick="confirmDelete('Bạn có chắc muốn xóa món @dish.DishName?', '/Admin/Dish/Delete?id=@dish.DishId')">
+                                            <i class="fas fa-trash"></i>
+                                        </button>
+                                    </div>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+}
+else
+{
+    <div class="empty-state">
+        <div class="empty-state-icon">
+            <i class="fas fa-utensils"></i>
+        </div>
+        <h3 class="empty-state-title">Chưa có món ăn nào</h3>
+        <p class="empty-state-description">Thêm món ăn đầu tiên vào thực đơn</p>
+        <a asp-action="Create" class="btn btn-primary">
+            <i class="fas fa-plus me-2"></i>Thêm món mới
+        </a>
+    </div>
+}
+
+@section Scripts {
+    <script>
+        function switchView(view) {
+            const gridView = document.getElementById('dishGrid');
+            const listView = document.getElementById('dishList');
+            const buttons = document.querySelectorAll('.view-toggle-btn');
+            
+            buttons.forEach(btn => btn.classList.remove('active'));
+            event.target.closest('.view-toggle-btn').classList.add('active');
+            
+            if (view === 'grid') {
+                gridView.style.display = 'grid';
+                listView.style.display = 'none';
+            } else {
+                gridView.style.display = 'none';
+                listView.style.display = 'block';
+            }
+        }
+    </script>
+}

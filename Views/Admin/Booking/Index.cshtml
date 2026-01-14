@@ -1,0 +1,93 @@
+@* Model: List of Booking objects *@
+@model IEnumerable<Web_QLNhaHang.Models.Booking>
+@{
+    ViewData["Title"] = "Quản lý đặt bàn";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<!-- Page Header -->
+<div class="page-header">
+    <h2><i class="fas fa-calendar-check"></i> Quản lý đặt bàn</h2>
+</div>
+
+<!-- Filter Card -->
+<div class="filter-card">
+    <form asp-action="Index" method="get" class="row g-3">
+        <div class="col-md-4">
+            <label class="form-label"><i class="fas fa-filter me-1"></i> Trạng thái</label>
+            <select name="status" class="form-select">
+                <option value="">Tất cả trạng thái</option>
+                <option value="Chờ" selected="@(ViewBag.Status == "Chờ")">Chờ xác nhận</option>
+                <option value="Xác nhận" selected="@(ViewBag.Status == "Xác nhận")">Đã xác nhận</option>
+                <option value="Hoàn tất" selected="@(ViewBag.Status == "Hoàn tất")">Hoàn tất</option>
+                <option value="Hủy" selected="@(ViewBag.Status == "Hủy")">Đã hủy</option>
+            </select>
+        </div>
+        <div class="col-md-3 d-flex align-items-end">
+            <button type="submit" class="btn btn-secondary w-100">
+                <i class="fas fa-search me-1"></i> Lọc
+            </button>
+        </div>
+    </form>
+</div>
+
+<!-- Data Table -->
+<div class="data-table">
+    @if (Model != null && Model.Any())
+    {
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Mã đặt bàn</th>
+                    <th>Khách hàng</th>
+                    <th>SĐT</th>
+                    <th>Ngày giờ</th>
+                    <th>Số khách</th>
+                    <th>Bàn</th>
+                    <th>Trạng thái</th>
+                    <th>Thao tác</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var booking in Model)
+                {
+                    <tr>
+                        <td><strong>#@booking.BookingId</strong></td>
+                        <td class="item-name">@booking.CustomerName</td>
+                        <td>@booking.CustomerPhone</td>
+                        <td>@booking.BookingDate.ToString("dd/MM/yyyy HH:mm")</td>
+                        <td><i class="fas fa-users me-1"></i>@booking.NumberOfGuests</td>
+                        <td>@(booking.Table?.TableNumber ?? "Chưa chọn")</td>
+                        <td>
+                            <span class="badge @(booking.Status == "Xác nhận" ? "bg-success" : booking.Status == "Hoàn tất" ? "bg-info" : booking.Status == "Hủy" ? "bg-danger" : "bg-warning")">
+                                @booking.Status
+                            </span>
+                        </td>
+                        <td>
+                            <a asp-action="Details" asp-route-id="@booking.BookingId" class="btn btn-action btn-view" title="Xem">
+                                <i class="fas fa-eye"></i>
+                            </a>
+                            @if (booking.Status == "Chờ")
+                            {
+                                <form asp-action="UpdateStatus" method="post" class="d-inline">
+                                    <input type="hidden" name="id" value="@booking.BookingId">
+                                    <input type="hidden" name="status" value="Xác nhận">
+                                    <button type="submit" class="btn btn-action" style="background: #27ae60; color: white;" title="Xác nhận">
+                                        <i class="fas fa-check"></i>
+                                    </button>
+                                </form>
+                            }
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+    else
+    {
+        <div class="empty-state">
+            <i class="fas fa-calendar-times"></i>
+            <p>Không có đặt bàn nào</p>
+        </div>
+    }
+</div>
